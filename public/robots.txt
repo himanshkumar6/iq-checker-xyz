@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://iqcheckerxyz.compresspdfto200kb.online/sitemap.xml

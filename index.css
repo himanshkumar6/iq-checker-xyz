@@ -1,0 +1,64 @@
+@import "tailwindcss";
+
+/* -------------------- */
+/* BASE TYPOGRAPHY */
+/* -------------------- */
+* {
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+/* -------------------- */
+/* ROOT COLORS FIX */
+/* -------------------- */
+html,
+body {
+  @apply bg-slate-950 text-slate-100;
+}
+
+.glass {
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* -------------------- */
+/* GRADIENT TEXT */
+/* -------------------- */
+.gradient-text {
+  background: linear-gradient(135deg, #3b82f6 0%, #a855f7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* -------------------- */
+/* SCROLLBAR FIX */
+/* -------------------- */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 10px;
+}
+
+/* -------------------- */
+/* SELECTION COLOR */
+/* -------------------- */
+::selection {
+  background: #3b82f6;
+  color: white;
+}
+
+/* -------------------- */
+/* TRANSITION FIX */
+/* -------------------- */
+body {
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
