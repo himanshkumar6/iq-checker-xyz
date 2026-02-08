@@ -111,7 +111,7 @@ const CursorGlow: React.FC = () => {
     <>
       <div
         ref={glowRef}
-        className="fixed top-0 left-0 w-20 h-20 rounded-full pointer-events-none z-[9999] blur-2xl opacity-40 mix-blend-screen transition-colors duration-500 will-change-transform hidden md:block"
+        className="fixed top-0 left-0 w-20 h-20 rounded-full pointer-events-none z-9999 blur-2xl opacity-40 mix-blend-screen transition-colors duration-500 will-change-transform hidden md:block"
         style={{
           background: 'radial-gradient(circle, rgba(255,45,85,1) 0%, rgba(255,45,85,0) 70%)',
           backgroundColor: 'transparent'
@@ -119,7 +119,7 @@ const CursorGlow: React.FC = () => {
       />
       <canvas
         ref={canvasRef}
-        className="fixed inset-0 pointer-events-none z-[9998] hidden md:block"
+        className="fixed inset-0 pointer-events-none z-9998 hidden md:block"
       />
       <style>{`
         .dark div[ref="glowRef"] {
