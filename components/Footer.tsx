@@ -60,7 +60,16 @@ const Footer: React.FC = () => {
               <li><Link to="/username-iq-checker" className="hover:text-blue-600">Username IQ Analytics</Link></li>
               <li><Link to="/reaction-test" className="hover:text-blue-600">Reaction Speed Test</Link></li>
               <li><Link to="/mental-age-test" className="hover:text-blue-600">Mental Age Assessment</Link></li>
-              <li><Link to="/brain-games" className="hover:text-blue-600">Brain Games</Link></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-bold mb-6 text-slate-900 dark:text-white">Brain Games</h4>
+            <ul className="space-y-4 text-sm text-slate-400">
+              <li><Link to="/brain-games/pattern-recognition" className="hover:text-blue-600">Pattern Recognition Game</Link></li>
+              <li><Link to="/brain-games/speed-math" className="hover:text-blue-600">Speed Math Challenge</Link></li>
+              <li><Link to="/brain-games/memory-grid" className="hover:text-blue-600">Memory Grid Game</Link></li>
+              <li><Link to="/brain-games" className="hover:text-blue-600 italic">View All Brain Exercises</Link></li>
             </ul>
           </div>
 

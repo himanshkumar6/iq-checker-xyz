@@ -35,12 +35,37 @@ export const SoundControl: React.FC = () => {
 };
 
 // Sound utility functions
-export const playSound = (type: 'click' | 'correct' | 'incorrect' | 'levelup') => {
+export const playSound = (type: 'click' | 'correct' | 'incorrect' | 'levelup' | 'celebration') => {
   const enabled = localStorage.getItem('brainGamesSoundEnabled') === 'true';
   if (!enabled) return;
 
   // Create simple beep sounds using Web Audio API
   const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+
+  if (type === 'celebration') {
+    // Play a soft major third chime (A4 + C#5)
+    const playTone = (freq: number, startTime: number) => {
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+
+      oscillator.frequency.value = freq;
+      oscillator.type = 'sine';
+
+      gainNode.gain.setValueAtTime(0.2, startTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + 0.3);
+
+      oscillator.start(startTime);
+      oscillator.stop(startTime + 0.3);
+    };
+
+    playTone(440, audioContext.currentTime);     // A4
+    playTone(554.37, audioContext.currentTime);  // C#5
+    return;
+  }
+
   const oscillator = audioContext.createOscillator();
   const gainNode = audioContext.createGain();
 
@@ -55,7 +80,7 @@ export const playSound = (type: 'click' | 'correct' | 'incorrect' | 'levelup') =
     levelup: 1600
   };
 
-  oscillator.frequency.value = frequencies[type];
+  oscillator.frequency.value = frequencies[type as keyof typeof frequencies];
   oscillator.type = 'sine';
 
   gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);

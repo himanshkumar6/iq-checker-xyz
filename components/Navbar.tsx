@@ -21,6 +21,7 @@ const Navbar: React.FC = () => {
     { name: 'IQ Test', path: '/iq-test' },
     { name: 'Username Checker', path: '/username-iq-checker' },
     { name: 'Reaction', path: '/reaction-test' },
+    { name: 'Brain Games', path: '/brain-games' },
     { name: 'Mental Age', path: '/mental-age-test' },
     { name: 'Blog', path: '/blog' },
   ];
@@ -43,7 +44,10 @@ const Navbar: React.FC = () => {
             <Link
               key={link.path}
               to={link.path}
-              className={`text-sm font-semibold transition-colors hover:text-blue-600 ${location.pathname === link.path ? 'text-blue-600' : 'text-slate-400'}`}
+              className={`text-sm font-semibold transition-colors hover:text-blue-600 ${location.pathname === link.path || (link.path !== '/' && location.pathname.startsWith(link.path))
+                  ? 'text-blue-600'
+                  : 'text-slate-400'
+                }`}
             >
               {link.name}
             </Link>

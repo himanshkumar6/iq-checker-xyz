@@ -6,6 +6,8 @@ import { SEO } from '../../lib/seo';
 import { useBrainGameSession } from '../../lib/hooks/useBrainGameSession';
 import { SessionSummaryModal } from '../../components/SessionSummaryModal';
 import { SoundControl, playSound } from '../../components/SoundControl';
+import { PersonalBestCelebration, triggerPBCelebration } from '../../components/PersonalBestCelebration';
+import { isNewPersonalBest, savePersonalBest } from '../../lib/personalBest';
 
 interface MathQuestion {
   question: string;
@@ -23,7 +25,16 @@ const SpeedMath: React.FC = () => {
   const [showSummary, setShowSummary] = useState(false);
 
   const { session, updateSession } = useBrainGameSession({
-    onSessionEnd: () => setShowSummary(true)
+    onSessionEnd: (finalSession) => {
+      // Check for personal best
+      const isNewBest = isNewPersonalBest('speed_math', finalSession.score, false);
+      if (isNewBest) {
+        savePersonalBest('speed_math', finalSession.score);
+        // Small delay to let the summary modal reveal animation start
+        setTimeout(() => triggerPBCelebration('speed_math'), 500);
+      }
+      setShowSummary(true);
+    }
   });
 
   // Generate math question based on difficulty
@@ -277,6 +288,9 @@ const SpeedMath: React.FC = () => {
           { label: 'Avg Time', value: `${(avgResponseTime / 1000).toFixed(1)}s` }
         ]}
       />
+
+      {/* Personal Best Celebration Overlay */}
+      <PersonalBestCelebration gameName="speed_math" />
     </div>
   );
 };

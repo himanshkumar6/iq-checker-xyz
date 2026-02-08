@@ -6,6 +6,8 @@ import { useStore } from '../store/useStore';
 import { downloadResultImage } from '../lib/share';
 import { SEO } from '../lib/seo';
 import { ShareModal } from '../components/ShareModal';
+import { PersonalBestCelebration, triggerPBCelebration } from '../components/PersonalBestCelebration';
+import { isNewPersonalBest, savePersonalBest } from '../lib/personalBest';
 
 type GameState = 'waiting' | 'ready' | 'clicking' | 'too-early' | 'result';
 
@@ -35,6 +37,15 @@ const ReactionTest: React.FC = () => {
       const time = Date.now() - startTime;
       setReactionTime(time);
       addReactionAttempt({ id: Date.now(), time });
+
+      // Check for personal best
+      const isNewBest = isNewPersonalBest('reaction_test', time, true);
+      if (isNewBest) {
+        savePersonalBest('reaction_test', time);
+        // Trigger celebration after a small delay to allow result screen to settle
+        setTimeout(() => triggerPBCelebration('reaction_test'), 300);
+      }
+
       setState('result');
     } else if (state === 'too-early' || state === 'result' || state === 'waiting') {
       startTest();
@@ -246,6 +257,9 @@ const ReactionTest: React.FC = () => {
           shareUrl={`${window.location.origin}/reaction-test`}
         />
       )}
+
+      {/* Personal Best Celebration Overlay */}
+      <PersonalBestCelebration gameName="reaction_test" />
     </div>
   );
 };

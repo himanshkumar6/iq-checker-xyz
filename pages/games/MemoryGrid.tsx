@@ -6,6 +6,8 @@ import { SEO } from '../../lib/seo';
 import { useBrainGameSession } from '../../lib/hooks/useBrainGameSession';
 import { SessionSummaryModal } from '../../components/SessionSummaryModal';
 import { SoundControl, playSound } from '../../components/SoundControl';
+import { PersonalBestCelebration, triggerPBCelebration } from '../../components/PersonalBestCelebration';
+import { isNewPersonalBest, savePersonalBest } from '../../lib/personalBest';
 
 type GamePhase = 'memorize' | 'recall' | 'feedback';
 
@@ -19,7 +21,16 @@ const MemoryGrid: React.FC = () => {
   const [showSummary, setShowSummary] = useState(false);
 
   const { session, updateSession } = useBrainGameSession({
-    onSessionEnd: () => setShowSummary(true)
+    onSessionEnd: (finalSession) => {
+      // Check for personal best
+      const isNewBest = isNewPersonalBest('memory_grid', finalSession.score, false);
+      if (isNewBest) {
+        savePersonalBest('memory_grid', finalSession.score);
+        // Small delay to let the summary modal reveal animation start
+        setTimeout(() => triggerPBCelebration('memory_grid'), 500);
+      }
+      setShowSummary(true);
+    }
   });
 
   // Generate random pattern
@@ -301,6 +312,9 @@ const MemoryGrid: React.FC = () => {
           { label: 'Grid Size', value: `${gridSize}×${gridSize}` }
         ]}
       />
+
+      {/* Personal Best Celebration Overlay */}
+      <PersonalBestCelebration gameName="memory_grid" />
     </div>
   );
 };

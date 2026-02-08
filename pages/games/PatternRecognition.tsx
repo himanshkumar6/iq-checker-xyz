@@ -6,6 +6,8 @@ import { SEO } from '../../lib/seo';
 import { useBrainGameSession } from '../../lib/hooks/useBrainGameSession';
 import { SessionSummaryModal } from '../../components/SessionSummaryModal';
 import { SoundControl, playSound } from '../../components/SoundControl';
+import { PersonalBestCelebration, triggerPBCelebration } from '../../components/PersonalBestCelebration';
+import { isNewPersonalBest, savePersonalBest } from '../../lib/personalBest';
 
 interface Pattern {
   sequence: number[];
@@ -22,7 +24,16 @@ const PatternRecognition: React.FC = () => {
   const [showSummary, setShowSummary] = useState(false);
 
   const { session, updateSession } = useBrainGameSession({
-    onSessionEnd: () => setShowSummary(true)
+    onSessionEnd: (finalSession) => {
+      // Check for personal best
+      const isNewBest = isNewPersonalBest('pattern_recognition', finalSession.score, false);
+      if (isNewBest) {
+        savePersonalBest('pattern_recognition', finalSession.score);
+        // Small delay to let the summary modal reveal animation start
+        setTimeout(() => triggerPBCelebration('pattern_recognition'), 500);
+      }
+      setShowSummary(true);
+    }
   });
 
   // Generate pattern based on difficulty
@@ -264,6 +275,9 @@ const PatternRecognition: React.FC = () => {
           { label: 'Patterns', value: session.questionsAnswered || 0 }
         ]}
       />
+
+      {/* Personal Best Celebration Overlay */}
+      <PersonalBestCelebration gameName="pattern_recognition" />
     </div>
   );
 };
