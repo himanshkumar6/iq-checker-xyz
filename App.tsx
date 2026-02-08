@@ -18,6 +18,7 @@ import DMCA from './pages/legal/DMCA';
 import UpsideDownParticles from './components/background/UpsideDownParticles';
 import WhiteFlakesBackground from './components/background/WhiteFlakesBackground';
 import CursorGlow from './components/cursor/CursorGlow';
+import { loadGA, trackPageView } from "./lib/analytics";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -30,6 +31,16 @@ const ScrollToTop = () => {
 };
 
 const App: React.FC = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    loadGA();
+  }, []);
+
+  useEffect(() => {
+    trackPageView(location.pathname);
+  }, [location.pathname]);
+
   return (
     <div className="min-h-screen bg-slate-950 transition-colors duration-300 relative">
       <ScrollToTop />
