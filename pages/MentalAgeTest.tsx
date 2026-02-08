@@ -4,58 +4,139 @@ import { Clock, ArrowRight, RefreshCcw, Share2, Star, Copy, Download, Check, Bra
 import { shareResult, downloadResultImage } from '../lib/share';
 import { SEO } from '../lib/seo';
 
-const MENTAL_QUESTIONS = [
-  { q: "You discover a new hobby. What do you do first?", options: ["Research it for hours", "Jump right in and learn as I go", "Ask someone to teach me", "I don't have time for hobbies"], score: [5, 1, 3, 10] },
-  { q: "How do you handle a cancelled plan?", options: ["Celebrate! Free time!", "A bit annoyed but move on", "Try to reschedule immediately", "Upset, I was looking forward to it"], score: [10, 5, 3, 2] },
-  { q: "What's your ideal vacation?", options: ["Relaxing beach resort", "Adventurous backpacking", "Quiet cabin in the woods", "The most expensive luxury city"], score: [8, 2, 6, 4] },
-  { q: "Pick a snack:", options: ["Candy/Sweets", "Fruit/Healthy", "Charcuterie board", "Whatever is fastest"], score: [1, 5, 8, 3] },
-  { q: "How do you feel about social media?", options: ["Love it, I'm always on", "Use it for news", "It's a necessary evil", "Waste of time"], score: [2, 5, 4, 10] }
-];
+import { MENTAL_AGE_QUESTIONS } from '../constants';
+import { MentalAgeQuestion } from '../types';
 
 const MentalAgeTest: React.FC = () => {
   const [step, setStep] = useState<'intro' | 'testing' | 'results'>('intro');
+  const [activeQuestions, setActiveQuestions] = useState<MentalAgeQuestion[]>([]);
   const [currentIdx, setCurrentIdx] = useState(0);
-  const [totalPoints, setTotalPoints] = useState(0);
+  const [answers, setAnswers] = useState<{ trait: string; score: number }[]>([]);
   const [copied, setCopied] = useState(false);
 
+  const handleStart = () => {
+    const STORAGE_KEY = 'usedQuestions_mental_age';
+    const TEST_SIZE = 15;
+
+    let usedIds: string[] = [];
+    try {
+      usedIds = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    } catch (e) {
+      usedIds = [];
+    }
+
+    let available = MENTAL_AGE_QUESTIONS.filter(q => !usedIds.includes(q.id));
+
+    if (available.length < TEST_SIZE) {
+      usedIds = [];
+      available = [...MENTAL_AGE_QUESTIONS];
+    }
+
+    const shuffled = [...available].sort(() => Math.random() - 0.5);
+    const selected = shuffled.slice(0, TEST_SIZE);
+
+    const newUsedIds = [...usedIds, ...selected.map(q => q.id)];
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(newUsedIds));
+
+    setActiveQuestions(selected);
+    setStep('testing');
+    setCurrentIdx(0);
+    setAnswers([]);
+  };
+
   const handleSelect = (points: number) => {
-    setTotalPoints(totalPoints + points);
-    if (currentIdx < MENTAL_QUESTIONS.length - 1) {
+    const currentQ = activeQuestions[currentIdx];
+    const newAnswers = [...answers, { trait: currentQ.trait, score: points }];
+    setAnswers(newAnswers);
+
+    if (currentIdx < activeQuestions.length - 1) {
       setCurrentIdx(currentIdx + 1);
     } else {
       setStep('results');
     }
   };
 
-  const calculateMentalAge = () => {
-    const base = 12;
-    return Math.floor(base + (totalPoints * 0.8));
+  const generateDetailedResult = () => {
+    const traits: Record<string, number[]> = {};
+    answers.forEach(a => {
+      if (!traits[a.trait]) traits[a.trait] = [];
+      traits[a.trait].push(a.score);
+    });
+
+    const traitScores: any = {};
+    Object.keys(traits).forEach(t => {
+      const avg = traits[t].reduce((a, b) => a + b, 0) / traits[t].length;
+      traitScores[t] = avg;
+    });
+
+    const allScores = Object.values(traitScores) as number[];
+    const avgMaturity = allScores.reduce((a, b) => a + b, 0) / allScores.length;
+
+    // Non-round mental age calculation
+    const mentalAge = parseFloat((14 + (avgMaturity * 5.6)).toFixed(1));
+
+    // Explanation generation
+    let explanation = "Your personality profile shows a balanced level of maturity.";
+    if (avgMaturity > 8) explanation = "You demonstrate a level of psychological depth and self-governance typically associated with significant life experience.";
+    else if (avgMaturity < 4) explanation = "Your responses indicate a highly reactive and spontaneous profile, common in early developmental stages.";
+
+    // Conflict detection
+    if (traitScores.responsibility > 8 && traitScores.impulsivity < 4) {
+      explanation += " However, your choices show internal conflict between rigid responsibility and sudden impulsivity.";
+    }
+
+    // Strengths & Weaknesses
+    const strengths: string[] = [];
+    const weaknesses: string[] = [];
+    Object.keys(traitScores).forEach(t => {
+      const score = traitScores[t];
+      const traitName = t.replace('_', ' ');
+      if (score >= 7.5) strengths.push(traitName.charAt(0).toUpperCase() + traitName.slice(1));
+      if (score <= 4) weaknesses.push(traitName.charAt(0).toUpperCase() + traitName.slice(1));
+    });
+
+    // Insight
+    let insight = "Consider how your immediate emotional reactions might be clouding your long-term goals.";
+    if (traitScores.long_term_thinking > 8) insight = "Your focus on the future is a shield, but don't let it become a cage that prevents present joy.";
+    if (traitScores.pressure_reaction < 3) insight = "You thrive in stability, but your mental resilience fluctuates significantly under sudden pressure.";
+    if (traitScores.self_awareness > 9) insight = "Self-awareness is a tool, but over-analysis can lead to paralysis. Trust your instincts more.";
+
+    return {
+      mentalAge,
+      explanation,
+      strengths: strengths.slice(0, 3),
+      weaknesses: weaknesses.slice(0, 3),
+      insight,
+      traitScores
+    };
   };
 
+  const result = step === 'results' ? generateDetailedResult() : null;
+
   const handleCopy = async () => {
-    const age = calculateMentalAge();
-    const text = `My mental age result is ${age}. Check yours: ${window.location.origin}/mental-age-test`;
+    if (!result) return;
+    const text = `My Mental Age is ${result.mentalAge}. Psychologically grounded assessment: ${window.location.origin}/mental-age-test`;
     await navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   const handleDownload = () => {
-    const age = calculateMentalAge();
+    if (!result) return;
     downloadResultImage(
-      'Mental Age Assessment',
-      age.toString(),
-      'Old Soul',
-      `PSYCHOLOGICAL MATURITY INDEX • IQCHECKERXYZ.COMPRESSPDFTO200KB.ONLINE`,
-      `mental-age-${age}.png`
+      'Psychological Maturity Report',
+      result.mentalAge.toString(),
+      'Maturity Level',
+      `TRAIT-BASED ASSESSMENT • IQCHECKERXYZ.ONLINE`,
+      `mental-age-${result.mentalAge}.png`
     );
   };
 
   const handleShare = async () => {
-    const age = calculateMentalAge();
+    if (!result) return;
     const status = await shareResult({
-      title: 'Mental Age Result - IQ Checker XYZ',
-      text: `My mental age is ${age}. What's yours?`,
+      title: 'Psychological Maturity Result',
+      text: `My mental age is ${result.mentalAge}. Get your trait-based report here:`,
       url: `${window.location.origin}/mental-age-test`
     });
     if (status === 'copied') {
@@ -75,29 +156,29 @@ const MentalAgeTest: React.FC = () => {
       <AnimatePresence mode="wait">
         {step === 'intro' && (
           <motion.div key="intro" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="glass p-12 rounded-[3rem]">
-            <Clock className="w-16 h-16 text-rose-500 mx-auto mb-6" />
-            <h1 className="text-4xl font-black mb-6 text-white">Mental Age Assessment</h1>
-            <p className="text-slate-400 mb-12 max-w-lg mx-auto">Discover how your personality and habits compare to your chronological age. Are you a child at heart or an old soul?</p>
+            <Brain className="w-16 h-16 text-rose-500 mx-auto mb-6" />
+            <h1 className="text-4xl font-black mb-6 text-white">Psychological Maturity Assessment</h1>
+            <p className="text-slate-400 mb-12 max-w-lg mx-auto">An evidence-based evaluation of cognitive and behavioral indicators. This is not a game; expect an honest reflection of your psychological traits.</p>
             <button
-              onClick={() => setStep('testing')}
+              onClick={handleStart}
               className="px-10 py-4 bg-rose-500 text-white font-black rounded-2xl shadow-xl shadow-rose-500/20"
             >
-              Start Test
+              Begin Assessment
             </button>
           </motion.div>
         )}
 
-        {step === 'testing' && (
+        {step === 'testing' && activeQuestions.length > 0 && (
           <motion.div key="testing" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-2xl mx-auto text-left">
-            <p className="text-sm font-bold text-rose-500 uppercase mb-2">Question {currentIdx + 1} of {MENTAL_QUESTIONS.length}</p>
-            <div className="glass p-10 rounded-[2rem]">
-              <h2 className="text-2xl font-bold mb-8 text-white">{MENTAL_QUESTIONS[currentIdx].q}</h2>
+            <p className="text-sm font-bold text-rose-500 uppercase mb-4 tracking-widest">Indicator {currentIdx + 1} / {activeQuestions.length}</p>
+            <div className="glass p-10 rounded-[2rem] border-l-4 border-rose-500">
+              <h2 className="text-2xl font-bold mb-8 text-white leading-relaxed">{activeQuestions[currentIdx].q}</h2>
               <div className="space-y-4">
-                {MENTAL_QUESTIONS[currentIdx].options.map((opt, idx) => (
+                {activeQuestions[currentIdx].options.map((opt, idx) => (
                   <button
                     key={idx}
-                    onClick={() => handleSelect(MENTAL_QUESTIONS[currentIdx].score[idx])}
-                    className="w-full p-6 text-left bg-slate-900 border border-slate-800 rounded-2xl font-bold hover:border-rose-500 transition-all text-slate-200"
+                    onClick={() => handleSelect(activeQuestions[currentIdx].score[idx])}
+                    className="w-full p-6 text-left bg-slate-900/50 border border-slate-800 rounded-2xl font-bold hover:border-rose-500/50 hover:bg-slate-800 transition-all text-slate-300"
                   >
                     {opt}
                   </button>
@@ -106,97 +187,137 @@ const MentalAgeTest: React.FC = () => {
             </div>
           </motion.div>
         )}
+        {step === 'results' && result && (
+          <motion.div key="results" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-left max-w-2xl mx-auto">
+            <div className="glass p-12 rounded-[3rem] border border-slate-800 bg-slate-950/50 overflow-hidden relative">
+              <div className="absolute top-0 right-0 p-8 opacity-5">
+                <Brain className="w-64 h-64 text-white" />
+              </div>
 
-        {step === 'results' && (
-          <motion.div key="results" initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="glass p-12 rounded-[3rem] bg-gradient-to-br from-rose-500 to-orange-500 text-white">
-            <Star className="w-16 h-16 text-white/50 mx-auto mb-6" />
-            <p className="text-sm font-bold uppercase tracking-widest opacity-80 mb-2">Your Mental Age is</p>
-            <h2 className="text-9xl font-black mb-8 leading-none tracking-tight">{calculateMentalAge()}</h2>
-            <p className="text-xl mb-12 opacity-90 font-bold">"You are an old soul with a youthful perspective."</p>
+              <div className="relative z-10">
+                <p className="text-rose-500 font-black uppercase tracking-[0.2em] mb-4 text-sm">Psychological Maturity Report</p>
+                <div className="flex items-baseline gap-4 mb-8">
+                  <h2 className="text-8xl font-black text-white leading-none">{result.mentalAge}</h2>
+                  <span className="text-slate-500 font-bold text-xl uppercase tracking-widest">Mental Age</span>
+                </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8 max-w-lg mx-auto">
-              <button
-                onClick={handleCopy}
-                className="flex items-center justify-center gap-2 p-4 bg-white/20 rounded-xl font-bold text-sm hover:bg-white/30 transition-all"
-              >
-                {copied ? <Check className="w-4 h-4 text-green-300" /> : <Copy className="w-4 h-4" />}
-                {copied ? 'Copied' : 'Copy'}
-              </button>
-              <button
-                onClick={handleDownload}
-                className="flex items-center justify-center gap-2 p-4 bg-white/20 rounded-xl font-bold text-sm hover:bg-white/30 transition-all"
-              >
-                <Download className="w-4 h-4" /> Save
-              </button>
-              <button
-                onClick={handleShare}
-                className="flex items-center justify-center gap-2 p-4 bg-white text-rose-500 rounded-xl font-bold text-sm shadow-lg transition-all"
-              >
-                <Share2 className="w-4 h-4" /> Share
-              </button>
+                <div className="space-y-8">
+                  <section>
+                    <h3 className="text-xs font-black uppercase text-slate-500 mb-3 tracking-widest">Primary Evaluation</h3>
+                    <p className="text-lg text-slate-200 leading-relaxed font-medium">{result.explanation}</p>
+                  </section>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <section>
+                      <h3 className="text-xs font-black uppercase text-green-500/70 mb-3 tracking-widest">Strengths Detected</h3>
+                      <ul className="space-y-2">
+                        {result.strengths.map(s => (
+                          <li key={s} className="text-sm font-bold text-slate-300 flex items-center gap-2">
+                            <div className="w-1.5 h-1.5 rounded-full bg-green-500" /> {s}
+                          </li>
+                        ))}
+                      </ul>
+                    </section>
+                    <section>
+                      <h3 className="text-xs font-black uppercase text-rose-500/70 mb-3 tracking-widest">Areas for Calibration</h3>
+                      <ul className="space-y-2">
+                        {result.weaknesses.map(w => (
+                          <li key={w} className="text-sm font-bold text-slate-300 flex items-center gap-2">
+                            <div className="w-1.5 h-1.5 rounded-full bg-rose-500" /> {w}
+                          </li>
+                        ))}
+                      </ul>
+                    </section>
+                  </div>
+
+                  <section className="p-6 bg-rose-500/10 rounded-2xl border border-rose-500/20">
+                    <h3 className="text-xs font-black uppercase text-rose-500 mb-2 tracking-widest">Mental Challenge Insight</h3>
+                    <p className="text-sm text-rose-100 font-bold leading-relaxed">{result.insight}</p>
+                  </section>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-12">
+                  <button
+                    onClick={handleCopy}
+                    className="flex items-center justify-center gap-2 p-4 bg-slate-900 border border-slate-800 rounded-xl font-bold text-xs text-slate-300 hover:bg-slate-800 transition-all"
+                  >
+                    {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
+                    {copied ? 'Link Copied' : 'Copy Result'}
+                  </button>
+                  <button
+                    onClick={handleDownload}
+                    className="flex items-center justify-center gap-2 p-4 bg-slate-900 border border-slate-800 rounded-xl font-bold text-xs text-slate-300 hover:bg-slate-800 transition-all"
+                  >
+                    <Download className="w-4 h-4" /> Export PDF
+                  </button>
+                  <button
+                    onClick={handleShare}
+                    className="flex items-center justify-center gap-2 p-4 bg-rose-500 text-white rounded-xl font-bold text-xs shadow-lg shadow-rose-500/20 transition-all"
+                  >
+                    <Share2 className="w-4 h-4" /> Share Report
+                  </button>
+                </div>
+
+                <button
+                  onClick={handleStart}
+                  className="mt-8 text-slate-500 hover:text-white font-bold flex items-center gap-2 mx-auto text-xs transition-colors"
+                >
+                  <RefreshCcw className="w-4 h-4" /> Reset Assessment
+                </button>
+              </div>
             </div>
-
-            <button
-              onClick={() => { setStep('intro'); setCurrentIdx(0); setTotalPoints(0); }}
-              className="text-white/60 hover:text-white font-bold flex items-center gap-2 mx-auto text-sm transition-colors"
-            >
-              <RefreshCcw className="w-4 h-4" /> Retake Test
-            </button>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Expanded Educational Content for Mental Age */}
+      {/* Expanded Educational Content for psychological maturity */}
       <div className="mt-24 pt-24 border-t border-slate-800 text-left">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-black mb-12 text-white">The Psychology of Mental Age Assessment</h2>
+          <h2 className="text-3xl font-black mb-12 text-white italic">The Framework of Psychological Maturity</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             <div className="space-y-6">
               <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                <Brain className="w-5 h-5 text-rose-500" /> What is Mental Age?
+                <Brain className="w-5 h-5 text-rose-500" /> Behavioral Indicators
               </h3>
               <p className="text-slate-400 text-sm leading-relaxed">
-                The concept of **mental age** was originally introduced by the French psychologist Alfred Binet in 1905. It was designed to define the age at which an individual's cognitive performance matches the average performance of a specific age group. For example, if a 10-year-old performs as well as the average 12-year-old on a logic scale, their mental age is 12.
+                Unlike simple quizzes, this assessment evaluates **cognitive and behavioral indicators** that define psychological age. Maturity is not merely the passage of time, but the development of specific traits such as *emotional regulation* and *long-term thinking*.
               </p>
               <p className="text-slate-400 text-sm leading-relaxed">
-                At **IQ Checker XYZ**, our assessment focuses more on the *behavioral and emotional* aspects of maturity rather than strict academic performance. We evaluate how you handle social situations, stress, and lifestyle choices to estimate your psychological maturity level.
+                By analyzing your risk tolerance and responsibility patterns, we can determine the 'age' of your decision-making processes, which often differs significantly from your chronological age.
               </p>
             </div>
 
             <div className="space-y-6">
               <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                <ShieldCheck className="w-5 h-5 text-rose-500" /> Emotional Intelligence (EQ)
+                <ShieldCheck className="w-5 h-5 text-rose-500" /> The Maturity Gap
               </h3>
               <p className="text-slate-400 text-sm leading-relaxed">
-                Modern psychology often links mental maturity to Emotional Intelligence. This involves self-regulation, empathy, and social awareness. A person with a high mental age often demonstrates 'Old Soul' characteristics: they are reflective, patient, and less prone to impulsive decisions driven by peer pressure.
+                It is medically recognized that different parts of the brain mature at different rates. The prefrontal cortex, responsible for impulse control, often doesn't fully develop until the mid-20s. This creates a "maturity gap" where cognitive ability might exceed emotional regulation.
               </p>
               <p className="text-slate-400 text-sm leading-relaxed">
-                Conversely, having a youthful mental age can be a sign of high creativity, spontaneity, and a "growth mindset." It doesn't necessarily mean immaturity, but rather a preservation of playfulness and curiosity that many lose as they age chronologically.
+                Our model identifies these inconsistencies, helping you understand where your psychological standing may be advanced or where it might still be anchored in adolescent reaction patterns.
               </p>
             </div>
           </div>
 
-          <div className="mt-16 p-8 bg-rose-500/5 rounded-3xl border border-rose-500/20">
-            <h3 className="text-xl font-bold text-white mb-6">Historical Context: The Binet-Simon Scale</h3>
-            <p className="text-slate-400 text-sm leading-relaxed mb-6">
-              Binet's work was revolutionary because it shifted the focus from measuring the size of the skull (phrenology) to measuring actual mental tasks. While the original scale was used to identify children who needed extra educational support, it later evolved into the foundational logic for the Stanford-Binet Intelligence Scales used today.
-            </p>
+          <div className="mt-16 p-8 bg-slate-900/50 rounded-3xl border border-slate-800">
+            <h3 className="text-xl font-bold text-white mb-6">Psychological Dimensions We Track</h3>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-              <div className="p-4 bg-slate-900 rounded-xl border border-slate-800">
+              <div className="p-4 bg-slate-900/50 rounded-xl border border-slate-800">
                 <HelpCircle className="w-5 h-5 text-rose-500 mb-2" />
-                <p className="text-xs font-bold text-white mb-1">Self-Reflection</p>
-                <p className="text-[10px] text-slate-500 leading-tight">Gauging your own maturity through introspection.</p>
+                <p className="text-xs font-black text-white mb-1">Self-Awareness</p>
+                <p className="text-[10px] text-slate-500 leading-tight">The ability to introspect and recognize one’s own mental states and drivers.</p>
               </div>
-              <div className="p-4 bg-slate-900 rounded-xl border border-slate-800">
+              <div className="p-4 bg-slate-900/50 rounded-xl border border-slate-800">
                 <BookOpen className="w-5 h-5 text-rose-500 mb-2" />
-                <p className="text-xs font-bold text-white mb-1">Habit Tracking</p>
-                <p className="text-[10px] text-slate-500 leading-tight">Analyzing daily routines and social responses.</p>
+                <p className="text-xs font-black text-white mb-1">Impulse Control</p>
+                <p className="text-[10px] text-slate-500 leading-tight">Measuring the threshold between an initial urge and a deliberate action.</p>
               </div>
-              <div className="p-4 bg-slate-900 rounded-xl border border-slate-800">
+              <div className="p-4 bg-slate-900/50 rounded-xl border border-slate-800">
                 <Star className="w-5 h-5 text-rose-500 mb-2" />
-                <p className="text-xs font-bold text-white mb-1">Personality Bias</p>
-                <p className="text-[10px] text-slate-500 leading-tight">Understanding how tastes and hobbies evolve over time.</p>
+                <p className="text-xs font-black text-white mb-1">Maturity Scale</p>
+                <p className="text-[10px] text-slate-500 leading-tight">Weighted scoring that prioritizes long-term outcomes over immediate gratification.</p>
               </div>
             </div>
           </div>

@@ -27,3 +27,29 @@ export interface ReactionAttempt {
   id: number;
   time: number;
 }
+
+export type MentalAgeTrait = 
+  | 'emotional_regulation'
+  | 'impulsivity'
+  | 'risk_tolerance'
+  | 'long_term_thinking'
+  | 'responsibility'
+  | 'pressure_reaction'
+  | 'self_awareness';
+
+export interface MentalAgeQuestion {
+  id: string;
+  q: string;
+  trait: MentalAgeTrait;
+  options: string[];
+  score: number[]; // Weights representing maturity contribution (0-10 scale)
+}
+
+export interface DetailedMentalAgeResult {
+  mentalAge: number;
+  explanation: string;
+  strengths: string[];
+  weaknesses: string[];
+  insight: string;
+  traitScores: Record<MentalAgeTrait, number>;
+}

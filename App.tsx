@@ -46,7 +46,7 @@ const App: React.FC = () => {
   }, [location.pathname]);
 
   return (
-    <div className="min-h-screen bg-slate-950 transition-colors duration-300 relative">
+    <div className="min-h-[100dvh] bg-slate-950 relative overflow-x-hidden">
       <ScrollToTop />
 
       {/* Background Layers */}
@@ -57,7 +57,7 @@ const App: React.FC = () => {
       </div>
 
       {/* Content Layers */}
-      <div className="relative z-10 flex flex-col min-h-screen">
+      <div className="relative z-10 flex flex-col min-h-[100dvh]">
         <Navbar />
 
         <main className="grow pt-20">

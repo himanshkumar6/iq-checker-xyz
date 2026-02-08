@@ -7,12 +7,22 @@
   font-family: "Plus Jakarta Sans", sans-serif;
 }
 
-/* -------------------- */
-/* ROOT COLORS FIX */
-/* -------------------- */
 html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #020617; /* Explicit slate-950 */
+  color: #f1f5f9; /* Explicit slate-100 */
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
+}
+
 body {
-  @apply bg-slate-950 text-slate-100;
+  @apply antialiased;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .glass {
@@ -27,6 +37,7 @@ body {
 .gradient-text {
   background: linear-gradient(135deg, #3b82f6 0%, #a855f7 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -52,13 +63,4 @@ body {
 ::selection {
   background: #3b82f6;
   color: white;
-}
-
-/* -------------------- */
-/* TRANSITION FIX */
-/* -------------------- */
-body {
-  transition:
-    background-color 0.3s ease,
-    color 0.3s ease;
 }
