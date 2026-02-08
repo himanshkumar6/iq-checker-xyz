@@ -248,7 +248,7 @@ const MentalAgeTest: React.FC = () => {
                     onClick={handleDownload}
                     className="flex items-center justify-center gap-2 p-4 bg-slate-900 border border-slate-800 rounded-xl font-bold text-xs text-slate-300 hover:bg-slate-800 transition-all"
                   >
-                    <Download className="w-4 h-4" /> Export PDF
+                    <Download className="w-4 h-4" /> Export PNG
                   </button>
                   <button
                     onClick={handleShare}
