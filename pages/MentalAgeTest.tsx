@@ -34,7 +34,7 @@ const MentalAgeTest: React.FC = () => {
 
   const handleCopy = async () => {
     const age = calculateMentalAge();
-    const text = `My mental age result is ${age}. Check yours: ${window.location.origin}/#/mental-age-test`;
+    const text = `My mental age result is ${age}. Check yours: ${window.location.origin}/mental-age-test`;
     await navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -56,7 +56,7 @@ const MentalAgeTest: React.FC = () => {
     const status = await shareResult({
       title: 'Mental Age Result - IQ Checker XYZ',
       text: `My mental age is ${age}. What's yours?`,
-      url: `${window.location.origin}/#/mental-age-test`
+      url: `${window.location.origin}/mental-age-test`
     });
     if (status === 'copied') {
       setCopied(true);

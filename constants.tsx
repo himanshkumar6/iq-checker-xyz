@@ -142,7 +142,7 @@ export const FAQS = [
   },
   {
     q: "What is a 'Genius' IQ score?",
-    a: "In most standard distributions (where the mean is 100 and the standard deviation is 15), a score of 140 or higher is typically categorized as 'Genius' or 'Near Genius.' This represents the top 0.5% of the population. A score of 130+ is considered 'Gifted' (top 2%), and 120+ is 'Superior'."
+    a: "In most standard distributions (where the mean is 100), a score of 140 or higher is often statistically categorized as 'Very Superior' or 'Genius' level potential. This typically represents the top 0.5% of the population. A score of 130+ is generally considered 'High Potential'."
   },
   {
     q: "How is the reaction speed test measured?",

@@ -9,8 +9,8 @@ const Home: React.FC = () => {
   return (
     <div className="overflow-hidden">
       <SEO
-        title="IQ Checker XYZ - Best Online IQ & Cognitive Assessments 2026"
-        description="Discover your true intelligence with IQ Checker XYZ. Fast, scientifically calibrated IQ tests, reaction speed benchmarks, and mental age assessments. Join 1M+ users."
+        title="IQ Checker XYZ - Free Standardized IQ Assessment 2026"
+        description="Discover your cognitive potential with IQ Checker XYZ. Fast, standardized IQ tests, reaction speed benchmarks, and logical assessments. Join the community."
         canonical="https://iqcheckerxyz.compresspdfto200kb.online/"
       />
 
@@ -24,14 +24,17 @@ const Home: React.FC = () => {
             transition={{ duration: 0.6 }}
           >
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-900/30 text-blue-400 text-sm font-bold mb-8">
-              <Sparkles className="w-4 h-4" /> Trusted by 1M+ Thinkers Globally
+              <Sparkles className="w-4 h-4" /> Educational Assessment Tool
             </span>
             <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-8 text-white">
               Discover Your True <br />
               <span className="gradient-text">Cognitive Potential</span>
             </h1>
             <p className="text-xl text-slate-400 mb-12 max-w-2xl mx-auto leading-relaxed">
-              Fast, accurate, and scientifically-designed IQ assessments. Join the community of elite thinkers and benchmark your logic, math, and patterns.
+              Fast, clear, and logic-based IQ assessments. Join the community of curious thinkers and benchmark your reasoning, math, and patterns.
+            </p>
+            <p className="text-sm text-slate-500 mb-6 font-medium">
+              Takes about 5–10 minutes · No signup required · Instant results
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
@@ -51,8 +54,35 @@ const Home: React.FC = () => {
         </div>
       </section>
 
+      {/* Philosophy & Purpose Section */}
+      <section className="py-16 px-4 bg-transparent border-y border-slate-900/50">
+        <div className="container mx-auto max-w-3xl text-center">
+          <h2 className="text-3xl font-extrabold mb-6 text-white">What Is IQ Checker XYZ?</h2>
+          <div className="space-y-4 text-slate-400 leading-relaxed text-sm md:text-base text-left md:text-center">
+            <p>
+              IQ Checker XYZ is an online tool built to give a general idea of how someone performs on common cognitive tasks. It provides a structured way to engage with logical puzzles and reasoning challenges often found in modern cognitive assessments.
+            </p>
+            <p>
+              The test focuses on specific areas like logical reasoning, pattern recognition, reaction speed, and basic problem solving. It is important to note that it does not try to measure creativity, emotional intelligence, or real-world experience. Those things are vital parts of intelligence, but they fall outside the scope of a standardized online tool.
+            </p>
+            <p>
+              The “XYZ” in IQ Checker XYZ refers to our simplified scoring approach. Instead of using academic or highly technical questions that require specific knowledge, the tool uses familiar reasoning patterns that most people can relate to. This makes the experience easier to understand and less intimidating for casual users.
+            </p>
+            <p>
+              This tool is designed for educational and self-assessment purposes only. It is not a medical, psychological, or clinical diagnosis. It should not be used as a substitute for professional clinical advice. Results should be viewed as a rough reference or a benchmarking exercise, not a final evaluation of human intelligence or worth.
+            </p>
+            <p>
+              Many users take tests like this out of curiosity or a desire for mental stimulation. Some enjoy seeing how they compare on basic reasoning tasks, while others like to track their reaction speed or mental agility over time. All of those reasons are valid within an educational context.
+            </p>
+            <p>
+              By focusing on logic and neutral patterns, we aim to provide a self-discovery tool that is both engaging and informative without making definitive authority claims about an individual's potential.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Tools Grid */}
-      <section className="py-24 px-4 bg-slate-900/50">
+      <section className="py-24 px-4 bg-transparent">
         <div className="container mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-extrabold mb-4">Powerful Testing Tools</h2>
@@ -85,7 +115,7 @@ const Home: React.FC = () => {
       </section>
 
       {/* New Educational Content for AdSense */}
-      <section className="py-24 px-4 bg-slate-950">
+      <section className="py-24 px-4 bg-slate-950/40 backdrop-blur-sm border-y border-slate-900/50">
         <div className="container mx-auto max-w-5xl">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
             <div>
@@ -117,13 +147,13 @@ const Home: React.FC = () => {
             <div className="grid grid-cols-2 gap-4">
               <div className="p-8 bg-slate-900 rounded-[2rem] border border-slate-800 text-center">
                 <BarChart3 className="w-8 h-8 text-blue-600 mx-auto mb-4" />
-                <p className="text-2xl font-black text-white">99.9%</p>
-                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Precision</p>
+                <p className="text-2xl font-black text-white">Logic</p>
+                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Standardized</p>
               </div>
               <div className="p-8 bg-slate-900 rounded-[2rem] border border-slate-800 text-center mt-8">
                 <BookOpen className="w-8 h-8 text-emerald-500 mx-auto mb-4" />
-                <p className="text-2xl font-black text-white">2026</p>
-                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Dataset</p>
+                <p className="text-2xl font-black text-white">Current</p>
+                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Framework</p>
               </div>
             </div>
           </div>
@@ -163,7 +193,10 @@ const Home: React.FC = () => {
                   <Brain className="w-16 h-16 mb-4 opacity-50" />
                   <p className="text-sm font-bold uppercase tracking-widest mb-2">My IQ Score</p>
                   <p className="text-7xl font-black mb-2">142</p>
-                  <div className="px-4 py-1 bg-white/20 rounded-full text-xs font-bold">TOP 0.5% - GENIUS</div>
+                  <div className="px-4 py-1 bg-white/20 rounded-full text-xs font-bold uppercase tracking-widest">Logic Score</div>
+                  <p className="text-[10px] text-white/40 mt-4 leading-tight italic max-w-[200px]">
+                    Score ranges are based on general population estimates and may vary across different tests and conditions.
+                  </p>
                 </div>
                 <div className="flex justify-between items-center text-xs text-slate-500 mb-2">
                   <p>Check yours at <span className="font-bold text-blue-600">iqcheckerxyz.compresspdfto200kb.online</span></p>
@@ -171,6 +204,17 @@ const Home: React.FC = () => {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Micro-niche Alignment */}
+      <section className="py-12 px-4 border-t border-slate-800/50">
+        <div className="container mx-auto max-w-4xl text-center">
+          <div className="space-y-2 text-slate-500 text-sm">
+            <p>IQ tests are one way to explore how the mind handles logic and patterns.</p>
+            <p>Reaction speed and mental age assessments offer a different perspective on cognitive performance.</p>
+            <p>These tools are meant to inform, not define.</p>
           </div>
         </div>
       </section>

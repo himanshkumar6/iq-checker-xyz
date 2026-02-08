@@ -31,35 +31,40 @@ const ScrollToTop = () => {
 
 const App: React.FC = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-slate-950 transition-colors duration-300 relative">
+    <div className="min-h-screen bg-slate-950 transition-colors duration-300 relative">
       <ScrollToTop />
 
-      {/* Background Effects */}
-      <WhiteFlakesBackground />
-      <UpsideDownParticles />
-      <CursorGlow />
+      {/* Background Layers */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <WhiteFlakesBackground />
+        <UpsideDownParticles />
+        <CursorGlow />
+      </div>
 
-      <Navbar />
+      {/* Content Layers */}
+      <div className="relative z-10 flex flex-col min-h-screen">
+        <Navbar />
 
-      <main className="grow pt-20 relative z-10">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/iq-test" element={<IQTest />} />
-          <Route path="/reaction-test" element={<ReactionTest />} />
-          <Route path="/mental-age-test" element={<MentalAgeTest />} />
-          <Route path="/username-iq-checker" element={<UsernameIQPage />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/blog/:slug" element={<BlogPost />} />
-          <Route path="/about-us" element={<AboutUs />} />
-          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="/terms" element={<Terms />} />
-          <Route path="/disclaimer" element={<Disclaimer />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/dmca" element={<DMCA />} />
-        </Routes>
-      </main>
+        <main className="grow pt-20">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/iq-test" element={<IQTest />} />
+            <Route path="/reaction-test" element={<ReactionTest />} />
+            <Route path="/mental-age-test" element={<MentalAgeTest />} />
+            <Route path="/username-iq-checker" element={<UsernameIQPage />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:slug" element={<BlogPost />} />
+            <Route path="/about-us" element={<AboutUs />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/disclaimer" element={<Disclaimer />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/dmca" element={<DMCA />} />
+          </Routes>
+        </main>
 
-      <Footer />
+        <Footer />
+      </div>
     </div>
   );
 };

@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Twitter, Instagram, Search, Share2, Download, Copy, Info, Check, ExternalLink, Clock } from 'lucide-react';
 import { useIqStore } from '../store/useIqStore';
 import { generateIqFromUsername } from '../lib/iqGenerator';
-import { shareResult, downloadResultImage, generateResultImageBlob } from '../lib/share';
+import { downloadResultImage, copyToClipboard, shareToTwitter } from '../lib/share';
 
 const BellCurve = ({ score }: { score: number }) => {
   const percentage = Math.min(Math.max(((score - 70) / 80) * 100, 5), 95);
@@ -56,7 +56,6 @@ export const UsernameIQChecker: React.FC = () => {
   const { username, setUsername, platform, setPlatform, result, setResult, isGenerating, setGenerating } = useIqStore();
   const [copied, setCopied] = React.useState(false);
   const [downloading, setDownloading] = React.useState(false);
-  const [sharing, setSharing] = React.useState(false);
 
   const handleCheck = () => {
     if (!username.trim()) return;
@@ -69,73 +68,39 @@ export const UsernameIQChecker: React.FC = () => {
   };
 
   const getShareText = () => {
-    const cleanUser = username.replace(/^@/, '');
-    return `@${cleanUser}'s estimated IQ score is ${result?.score} on IQ Checker XYZ! 🧠`;
+    if (!result) return '';
+    return `I tried this username IQ check for fun — got ${result.score}. Curious what yours would be? (Self-assessed • For curiosity only)`;
   };
 
-  const handleShare = async () => {
+  const handleTwitterShare = () => {
     if (!result) return;
-    setSharing(true);
 
-    const title = `@${username.replace(/^@/, '')}'s Estimated IQ`;
-    const label = result.category;
-    const footer = `ESTIMATED ACCOUNT AGE: ${result.ageScore} YEARS • IQCHECKERXYZ.COMPRESSPDFTO200KB.ONLINE`;
-    const filename = `iq-result-${username.replace(/^@/, '')}.png`;
-
-    let files: File[] | undefined = undefined;
-
-    // Attempt to generate image for sharing (supported on many mobile browsers)
-    try {
-      const blob = await generateResultImageBlob(title, result.score.toString(), label, footer);
-      if (blob) {
-        files = [new File([blob], filename, { type: 'image/png' })];
-      }
-    } catch (e) {
-      console.error('Failed to generate sharing image:', e);
-    }
-
-    const shareOptions = {
-      title: 'IQ Checker Result',
-      text: getShareText(),
-      url: `${window.location.origin}/#/username-iq-checker`
-    };
-
-    // If on desktop and X (Twitter) is the current context, we can use a direct intent as fallback
-    if (platform === 'twitter' && !navigator.share) {
-      const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareOptions.text + "\n\n" + shareOptions.url)}`;
-      window.open(twitterUrl, '_blank');
-      setSharing(false);
-      return;
-    }
-
-    const status = await shareResult(shareOptions, files);
-
-    if (status === 'copied') {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
+    const shareUrl = `${window.location.origin}/username-iq-checker`;
+    shareToTwitter(getShareText(), shareUrl);
 
     setSharing(false);
   };
 
   const handleCopy = async () => {
-    const text = `${getShareText()}\nCheck yours: ${window.location.origin}/#/username-iq-checker`;
-    await navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    const text = `${getShareText()}\n\nhttps://iqcheckerxyz.compresspdfto200kb.online/username-iq-checker`;
+    const success = await copyToClipboard(text);
+    if (success) {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
   };
 
   const handleDownload = () => {
     if (!result) return;
     setDownloading(true);
     downloadResultImage(
-      `@${username.replace(/^@/, '')}'s Estimated IQ`,
+      'Username IQ Check',
       result.score.toString(),
       result.category,
-      `ESTIMATED ACCOUNT AGE: ${result.ageScore} YEARS • IQCHECKERXYZ.COMPRESSPDFTO200KB.ONLINE`,
-      `iq-result-${username.replace(/^@/, '')}.png`
+      'SELF-ASSESSED • FOR CURIOSITY ONLY',
+      `username-iq-${username.replace(/^@/, '')}-${Date.now()}.png`
     );
-    setDownloading(false);
+    setTimeout(() => setDownloading(false), 500);
   };
 
   return (
@@ -213,38 +178,40 @@ export const UsernameIQChecker: React.FC = () => {
 
               <BellCurve score={result.score} />
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-8">
+              <div className="space-y-4 mt-8">
                 <button
-                  onClick={handleCopy}
-                  className="flex items-center justify-center gap-2 p-4 bg-slate-900 rounded-xl font-bold text-sm shadow-sm hover:bg-slate-800 transition-all border border-slate-800"
+                  onClick={handleTwitterShare}
+                  className="w-full flex items-center justify-center gap-2 p-4 bg-[#1DA1F2] text-white rounded-xl font-bold text-sm shadow-md hover:bg-[#1a8cd8] transition-all"
                 >
-                  {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
-                  {copied ? 'Copied!' : 'Copy Result'}
+                  <Twitter className="w-5 h-5" />
+                  Share on X (Twitter)
                 </button>
-                <button
-                  onClick={handleDownload}
-                  disabled={downloading}
-                  className="flex items-center justify-center gap-2 p-4 bg-slate-900 rounded-xl font-bold text-sm shadow-sm hover:bg-slate-800 transition-all border border-slate-800 disabled:opacity-50"
-                >
-                  {downloading ? (
-                    <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}>
-                      <Download className="w-4 h-4" />
-                    </motion.div>
-                  ) : <Download className="w-4 h-4" />}
-                  {downloading ? 'Saving...' : 'Download Image'}
-                </button>
-                <button
-                  onClick={handleShare}
-                  disabled={sharing}
-                  className={`flex items-center justify-center gap-2 p-4 text-white rounded-xl font-bold text-sm shadow-md transition-all ${platform === 'twitter' ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gradient-to-tr from-yellow-500 via-pink-500 to-purple-600 hover:opacity-90'} disabled:opacity-50`}
-                >
-                  {sharing ? (
-                    <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}>
-                      <Share2 className="w-4 h-4" />
-                    </motion.div>
-                  ) : <Share2 className="w-4 h-4" />}
-                  {sharing ? 'Preparing...' : 'Share Result'}
-                </button>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    onClick={handleCopy}
+                    className="flex items-center justify-center gap-2 p-4 bg-slate-900 rounded-xl font-bold text-sm shadow-sm hover:bg-slate-800 transition-all border border-slate-800"
+                  >
+                    {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
+                    {copied ? 'Copied!' : 'Copy Link'}
+                  </button>
+                  <button
+                    onClick={handleDownload}
+                    disabled={downloading}
+                    className="flex items-center justify-center gap-2 p-4 bg-slate-900 rounded-xl font-bold text-sm shadow-sm hover:bg-slate-800 transition-all border border-slate-800 disabled:opacity-50"
+                  >
+                    {downloading ? (
+                      <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}>
+                        <Download className="w-4 h-4" />
+                      </motion.div>
+                    ) : <Instagram className="w-4 h-4" />}
+                    {downloading ? 'Saving...' : 'For Instagram'}
+                  </button>
+                </div>
+
+                <p className="text-xs text-slate-400 text-center italic">
+                  💡 Download the card and share it on Instagram Stories or Feed
+                </p>
               </div>
 
               <p className="mt-8 text-[11px] text-slate-400 italic font-medium leading-relaxed">

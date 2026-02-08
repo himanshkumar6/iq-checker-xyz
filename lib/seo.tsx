@@ -7,6 +7,7 @@ export interface SEOProps {
   ogType?: string;
   ogTitle?: string;
   ogDescription?: string;
+  noindex?: boolean;
 }
 
 export const SEO: React.FC<SEOProps> = ({
@@ -15,7 +16,8 @@ export const SEO: React.FC<SEOProps> = ({
   canonical,
   ogType = 'website',
   ogTitle,
-  ogDescription
+  ogDescription,
+  noindex = false
 }) => {
   const currentUrl = typeof window !== 'undefined' ? window.location.href : 'https://iqcheckerxyz.compresspdfto200kb.online/';
 
@@ -23,7 +25,8 @@ export const SEO: React.FC<SEOProps> = ({
     <>
       <title>{title}</title>
       <meta name="description" content={description} />
-      {canonical && <link rel="canonical" href={canonical} />}
+      {noindex && <meta name="robots" content="noindex, nofollow" />}
+      {canonical && !noindex && <link rel="canonical" href={canonical} />}
 
       {/* Open Graph */}
       <meta property="og:title" content={ogTitle || title} />

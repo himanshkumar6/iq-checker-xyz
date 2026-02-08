@@ -1,14 +1,14 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Brain, Twitter, Instagram, Mail, Github, ShieldCheck, MapPin } from 'lucide-react';
+import { Brain, Twitter, Instagram, Mail, Github, ShieldCheck } from 'lucide-react';
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-slate-950 border-t border-slate-900 pt-20 pb-10 mt-20 relative z-20">
-      <div className="container mx-auto px-4">
+    <footer className="relative mt-20 border-t border-slate-900 bg-slate-950/80 backdrop-blur-sm overflow-hidden">
+      <div className="container mx-auto px-4 relative pt-20 pb-10">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
           <div className="col-span-1 md:col-span-1">
             <Link to="/" className="flex items-center gap-2 mb-6">
@@ -79,7 +79,6 @@ const Footer: React.FC = () => {
               <li><Link to="/privacy-policy" className="hover:text-blue-600">Privacy Policy</Link></li>
               <li><Link to="/terms" className="hover:text-blue-600">Terms of Service</Link></li>
               <li><Link to="/disclaimer" className="hover:text-blue-600">Health Disclaimer</Link></li>
-              <li><span className="flex items-center gap-2 text-emerald-600 font-bold"><ShieldCheck className="w-4 h-4" /> EEAT Compliant</span></li>
             </ul>
           </div>
         </div>

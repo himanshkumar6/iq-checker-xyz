@@ -6,6 +6,67 @@ export interface ShareOptions {
 }
 
 /**
+ * Share to X (Twitter) using intent URL
+ * Opens in a new window with properly encoded text and URL
+ */
+export const shareToTwitter = (text: string, url: string): void => {
+  if (typeof window === 'undefined') return;
+  
+  const tweetText = `${text}\n\n${url}`;
+  const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
+  window.open(twitterUrl, '_blank', 'noopener,noreferrer,width=550,height=420');
+};
+
+/**
+ * Share to Facebook using sharer dialog
+ * Opens in a new window with the URL to share
+ */
+export const shareToFacebook = (url: string): void => {
+  if (typeof window === 'undefined') return;
+  
+  const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+  window.open(facebookUrl, '_blank', 'noopener,noreferrer,width=550,height=420');
+};
+
+/**
+ * Copy text to clipboard with fallback for unsupported browsers
+ * Returns true if successful, false otherwise
+ */
+export const copyToClipboard = async (text: string): Promise<boolean> => {
+  if (typeof window === 'undefined') return false;
+
+  // Try modern Clipboard API first
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch (err) {
+      console.warn('Clipboard API failed, trying fallback:', err);
+    }
+  }
+
+  // Fallback for older browsers
+  try {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-999999px';
+    textArea.style.top = '-999999px';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    
+    const successful = document.execCommand('copy');
+    document.body.removeChild(textArea);
+    
+    return successful;
+  } catch (err) {
+    console.error('All clipboard methods failed:', err);
+    return false;
+  }
+};
+
+/**
  * Universal share utility that prioritizes Web Share API 
  * and fallbacks to Clipboard API. Supports file sharing if available.
  */
@@ -34,14 +95,9 @@ export const shareResult = async (options: ShareOptions, files?: File[]): Promis
   }
 
   // Fallback to Clipboard API
-  try {
-    const fullText = `${text}\n\nCheck it out: ${url}`;
-    await navigator.clipboard.writeText(fullText);
-    return 'copied';
-  } catch (err) {
-    console.error('Share and Clipboard both failed:', err);
-    return 'failed';
-  }
+  const fullText = `${text}\n\nCheck it out: ${url}`;
+  const copied = await copyToClipboard(fullText);
+  return copied ? 'copied' : 'failed';
 };
 
 /**
@@ -109,13 +165,18 @@ const drawResultCanvas = (
   ctx.fillStyle = '#ffffff';
   ctx.fillText(badgeText, 540, badgeY + badgeH / 2);
 
+  // Educational Watermark (more prominent)
+  ctx.fillStyle = '#475569';
+  ctx.font = 'bold 28px Plus Jakarta Sans, sans-serif';
+  ctx.fillText('SELF-ASSESSED • EDUCATIONAL ONLY', 540, 900);
+
   // Footer
   ctx.fillStyle = '#64748b';
   ctx.font = '500 24px Plus Jakarta Sans, sans-serif';
-  ctx.fillText(footer, 540, 1000);
+  ctx.fillText(footer, 540, 980);
 
-  ctx.font = '400 18px Plus Jakarta Sans, sans-serif';
-  ctx.fillText('Analysis for entertainment purposes only at IQCHECKERXYZ.COMPRESSPDFTO200KB.ONLINE', 540, 1040);
+  ctx.font = '400 20px Plus Jakarta Sans, sans-serif';
+  ctx.fillText('IQCHECKERXYZ.COMPRESSPDFTO200KB.ONLINE', 540, 1040);
 
   return canvas;
 };

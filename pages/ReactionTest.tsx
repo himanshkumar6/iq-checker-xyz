@@ -3,8 +3,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Zap, Clock, Info, RefreshCcw, Trophy, Share2, Copy, Download, Check, Brain, MousePointer2, Activity } from 'lucide-react';
 import { useStore } from '../store/useStore';
-import { shareResult, downloadResultImage } from '../lib/share';
+import { downloadResultImage } from '../lib/share';
 import { SEO } from '../lib/seo';
+import { ShareModal } from '../components/ShareModal';
 
 type GameState = 'waiting' | 'ready' | 'clicking' | 'too-early' | 'result';
 
@@ -12,7 +13,7 @@ const ReactionTest: React.FC = () => {
   const [state, setState] = useState<GameState>('waiting');
   const [startTime, setStartTime] = useState(0);
   const [reactionTime, setReactionTime] = useState<number | null>(null);
-  const [copied, setCopied] = useState(false);
+  const [shareModalOpen, setShareModalOpen] = useState(false);
   const timeoutRef = useRef<any>(null);
   const addReactionAttempt = useStore(state => state.addReactionAttempt);
   const history = useStore(state => state.reactionHistory);
@@ -40,14 +41,6 @@ const ReactionTest: React.FC = () => {
     }
   };
 
-  const handleCopy = async () => {
-    if (!reactionTime) return;
-    const text = `My reaction speed is ${reactionTime}ms on IQ Checker XYZ. Beat me: ${window.location.origin}/#/reaction-test`;
-    await navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
   const handleDownload = () => {
     if (!reactionTime) return;
     const rating = getRating(reactionTime);
@@ -58,19 +51,6 @@ const ReactionTest: React.FC = () => {
       `COGNITIVE PROCESSING SPEED • IQCHECKERXYZ.COMPRESSPDFTO200KB.ONLINE`,
       `reaction-speed-${reactionTime}ms.png`
     );
-  };
-
-  const handleShare = async () => {
-    if (!reactionTime) return;
-    const status = await shareResult({
-      title: 'Reaction Speed Result - IQ Checker XYZ',
-      text: `My reaction speed is ${reactionTime}ms. Can you beat me?`,
-      url: `${window.location.origin}/#/reaction-test`
-    });
-    if (status === 'copied') {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
   };
 
   useEffect(() => {
@@ -89,20 +69,20 @@ const ReactionTest: React.FC = () => {
     <div className="container mx-auto px-4 py-12 max-w-4xl">
       <SEO
         title="Reaction Time Test - Measure Your Cognitive Speed | IQ Checker XYZ"
-        description="Benchmark your reaction speed with millisecond precision. Compare your results with the global average and elite gaming standards. Free cognitive tools."
+        description="Benchmark your reaction speed with millisecond precision. Compare your results with the global average. Free cognitive tools."
         canonical="https://iqcheckerxyz.compresspdfto200kb.online/reaction-test"
       />
 
       <div className="text-center mb-12">
         <h1 className="text-4xl font-black mb-4 text-white">Reaction Speed Test</h1>
-        <p className="text-slate-400 font-medium">Measure your cognitive processing and nerve conduction velocity with 1ms precision.</p>
+        <p className="text-slate-400 font-medium">Measure your cognitive processing and response time with 1ms precision.</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2">
+      <div className="grid grid-cols-1 gap-8 max-w-2xl mx-auto">
+        <div className="w-full">
           <motion.div
             onClick={handleClick}
-            className={`h-[400px] rounded-[3rem] shadow-2xl flex flex-col items-center justify-center cursor-pointer transition-colors duration-200 text-white text-center p-8 ${state === 'waiting' ? 'bg-blue-600' :
+            className={`min-h-[400px] h-auto rounded-[2rem] md:rounded-[3rem] shadow-2xl flex flex-col items-center justify-center cursor-pointer transition-colors duration-200 text-white text-center p-6 md:p-12 ${state === 'waiting' ? 'bg-blue-600' :
               state === 'ready' ? 'bg-rose-500' :
                 state === 'clicking' ? 'bg-emerald-500' :
                   state === 'too-early' ? 'bg-slate-800' :
@@ -138,31 +118,24 @@ const ReactionTest: React.FC = () => {
               )}
               {state === 'result' && reactionTime && (
                 <motion.div key="result" initial={{ y: 20 }} animate={{ y: 0 }}>
-                  <h2 className="text-sm font-bold uppercase tracking-widest opacity-80 mb-2">Reaction Time</h2>
-                  <h3 className="text-8xl font-black mb-6">{reactionTime} <span className="text-2xl">ms</span></h3>
+                  <h2 className="text-xs md:text-sm font-bold uppercase tracking-widest opacity-80 mb-2">Reaction Time</h2>
+                  <h3 className="text-5xl md:text-8xl font-black mb-6">{reactionTime} <span className="text-2xl md:text-4xl">ms</span></h3>
                   <div className={`px-4 py-1 bg-white/20 rounded-full font-black text-sm uppercase mb-8`}>
                     {getRating(reactionTime).label}
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <button
-                      onClick={(e) => { e.stopPropagation(); handleCopy(); }}
-                      className="flex items-center justify-center gap-2 p-3 bg-white/10 rounded-xl hover:bg-white/20 transition-all text-xs font-bold"
-                    >
-                      {copied ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4" />}
-                      {copied ? 'Copied' : 'Copy'}
-                    </button>
+                  <div className="grid grid-cols-2 gap-3 w-full max-w-md mx-auto">
                     <button
                       onClick={(e) => { e.stopPropagation(); handleDownload(); }}
-                      className="flex items-center justify-center gap-2 p-3 bg-white/10 rounded-xl hover:bg-white/20 transition-all text-xs font-bold"
+                      className="flex flex-col md:flex-row items-center justify-center gap-2 p-3 min-h-[60px] md:min-h-[44px] bg-white/10 rounded-xl hover:bg-white/20 transition-all text-[10px] md:text-xs font-bold active:scale-95 touch-manipulation"
                     >
-                      <Download className="w-4 h-4" /> Save
+                      <Download className="w-5 h-5 md:w-4 md:h-4" /> <span>Download</span>
                     </button>
                     <button
-                      onClick={(e) => { e.stopPropagation(); handleShare(); }}
-                      className="flex items-center justify-center gap-2 p-3 bg-white text-blue-600 rounded-xl hover:bg-slate-100 transition-all text-xs font-bold"
+                      onClick={(e) => { e.stopPropagation(); setShareModalOpen(true); }}
+                      className="flex flex-col md:flex-row items-center justify-center gap-2 p-3 min-h-[60px] md:min-h-[44px] bg-white text-blue-600 rounded-xl hover:bg-slate-100 transition-all text-[10px] md:text-xs font-bold active:scale-95 touch-manipulation shadow-lg"
                     >
-                      <Share2 className="w-4 h-4" /> Share
+                      <Share2 className="w-5 h-5 md:w-4 md:h-4" /> <span>Share</span>
                     </button>
                   </div>
 
@@ -178,7 +151,7 @@ const ReactionTest: React.FC = () => {
           </motion.div>
         </div>
 
-        <div className="lg:col-span-1">
+        <div className="w-full">
           <div className="glass rounded-[2rem] p-8 h-full">
             <h3 className="text-xl font-bold mb-6 flex items-center gap-2 text-white">
               <Trophy className="w-5 h-5 text-amber-500" /> Your History
@@ -255,10 +228,24 @@ const ReactionTest: React.FC = () => {
               <Trophy className="w-5 h-5" />
             </div>
             <p className="font-bold text-white text-sm mb-1 uppercase tracking-tight">Global Ranking</p>
-            <p className="text-xs text-slate-500">Benchmark yourself against 100,000+ daily users.</p>
+            <p className="text-xs text-slate-500">Benchmark yourself against the community average.</p>
           </div>
         </div>
       </div>
+
+      {/* Share Modal */}
+      {reactionTime && (
+        <ShareModal
+          isOpen={shareModalOpen}
+          onClose={() => setShareModalOpen(false)}
+          title="Reaction Speed Assessment"
+          value={`${reactionTime}ms`}
+          label={getRating(reactionTime).label}
+          footer="COGNITIVE PROCESSING SPEED"
+          shareText={`My reaction speed is ${reactionTime}ms on IQ Checker XYZ. Can you beat me?`}
+          shareUrl={`${window.location.origin}/reaction-test`}
+        />
+      )}
     </div>
   );
 };

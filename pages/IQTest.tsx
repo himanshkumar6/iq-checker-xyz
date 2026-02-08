@@ -64,7 +64,7 @@ const IQTest: React.FC = () => {
 
   const handleCopy = async () => {
     if (!lastResult) return;
-    const text = `My IQ score is ${lastResult.score} on IQ Checker XYZ. Try it here: ${window.location.origin}/#/iq-test`;
+    const text = `My IQ score is ${lastResult.score} on IQ Checker XYZ. Try it here: ${window.location.origin}/iq-test`;
     await navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -86,7 +86,7 @@ const IQTest: React.FC = () => {
     const status = await shareResult({
       title: 'My IQ Score - IQ Checker XYZ',
       text: `My IQ score is ${lastResult.score} on IQ Checker XYZ.`,
-      url: `${window.location.origin}/#/iq-test`
+      url: `${window.location.origin}/iq-test`
     });
     if (status === 'copied') {
       setCopied(true);
@@ -108,7 +108,7 @@ const IQTest: React.FC = () => {
     <div className="container mx-auto px-4 max-w-4xl py-12">
       <SEO
         title="Free Standard IQ Test 2026 - Instant Results | IQ Checker XYZ"
-        description="Take our scientifically designed 15-question IQ assessment. Measure your logical reasoning, math, and pattern recognition skills for free. Get instant percentile ranking."
+        description="Take our logic-based 15-question IQ assessment. Measure your logical reasoning, math, and pattern recognition skills for free. Get instant percentile ranking."
         canonical="https://iqcheckerxyz.compresspdfto200kb.online/iq-test"
       />
       <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
@@ -244,12 +244,12 @@ const IQTest: React.FC = () => {
                   <Star className="w-8 h-8 text-white/20" />
                 </div>
                 <Trophy className="w-16 h-16 mx-auto mb-6 text-white/50" />
-                <p className="text-sm font-bold uppercase tracking-[0.2em] mb-4 opacity-80">Final IQ Score</p>
+                <p className="text-sm font-bold uppercase tracking-[0.2em] mb-4 opacity-80">Educational Score</p>
                 <h2 className="text-8xl font-black mb-6 leading-none tracking-tight">{lastResult.score}</h2>
                 <div className="inline-block px-6 py-2 bg-white/20 rounded-full text-sm font-black uppercase tracking-widest mb-4">
                   {lastResult.level}
                 </div>
-                <p className="text-sm opacity-80">You performed better than <span className="font-bold">{lastResult.percentile}%</span> of the population.</p>
+                <p className="text-sm opacity-80">Your score is higher than <span className="font-bold">{lastResult.percentile}%</span> of the population.</p>
               </div>
             </div>
 
@@ -301,7 +301,7 @@ const IQTest: React.FC = () => {
                 <ShieldCheck className="text-blue-600" /> Professional Methodology
               </h3>
               <p className="mt-4 leading-relaxed">
-                Our free IQ test at **IQ Checker XYZ** is designed to measure your fluid intelligence—your ability to solve new problems, use logic in new situations, and identify patterns. This differs from "crystallized intelligence," which involves knowledge acquired through education and experience.
+                Our free IQ test at **IQ Checker XYZ** is structured to measure your fluid intelligence—your ability to solve new problems, use logic in new situations, and identify patterns. This differs from "crystallized intelligence," which involves knowledge acquired through education and experience.
               </p>
               <p className="mt-4">
                 We utilize non-verbal matrices and logical syllogisms that are culturally neutral, ensuring that your background or primary language doesn't unfairly influence your score.
@@ -320,15 +320,15 @@ const IQTest: React.FC = () => {
           <div className="mt-16 bg-blue-50 dark:bg-blue-900/10 p-8 rounded-3xl border border-blue-100 dark:border-blue-900/30">
             <h3 className="text-xl font-bold mb-4 text-blue-600">Educational Disclaimer</h3>
             <p className="text-sm text-slate-500 leading-relaxed">
-              IQ Checker XYZ provides these assessments for educational and entertainment purposes. While our algorithms are calibrated using modern psychometric data, this test is not a substitute for a clinical assessment performed by a licensed psychologist using the WAIS-IV or Cattell scales. Results may vary based on your environmental factors, fatigue levels, and familiarity with logic puzzles.
+              IQ Checker XYZ provides these assessments for educational and entertainment purposes. While our algorithms are calibrated using modern data, this test is not a substitute for a clinical assessment performed by a licensed psychologist. Results may vary based on your environmental factors, fatigue levels, and familiarity with logic puzzles.
             </p>
           </div>
 
           <h2 className="text-3xl font-black mt-24 mb-12 text-center">Frequently Asked Questions</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FAQItem q="Is this IQ test really free?" a="Yes, the standard 15-question assessment on IQ Checker XYZ is completely free for all users. We believe cognitive tools should be accessible to everyone." />
-            <FAQItem q="What is a good IQ score?" a="A score between 90 and 110 is considered average. Anything above 120 is superior, and 140+ is considered genius-level intelligence." />
-            <FAQItem q="How accurate is the result?" a="While no online test is 100% clinincally accurate, our tool provides a high-confidence estimate based on logical matrices and pattern recognition." />
+            <FAQItem q="What is a good IQ score?" a="A score between 90 and 110 is considered average. Anything above 120 is superior, and 140+ indicates very high cognitive potential." />
+            <FAQItem q="How accurate is the result?" a="While no online test is 100% clinically accurate, our tool provides a helpful educational estimate based on logical matrices and pattern recognition." />
             <FAQItem q="Can I improve my IQ score?" a="Fluid intelligence can be sharpened through cognitive training, deep reading, and regular logic puzzles. However, your core 'potential' stays relatively stable through adulthood." />
             <FAQItem q="Do I get a certificate?" a="Upon completion, you receive a digital result card that verifies your score and percentile compared to our global database." />
             <FAQItem q="How is the score calculated?" a="We use a weighted algorithm that considers correct answers, question difficulty, and the time taken to respond to each logic puzzle." />

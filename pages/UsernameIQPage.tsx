@@ -51,10 +51,10 @@ const UsernameIQPage: React.FC = () => {
 
             <div className="bg-slate-900/50 p-8 rounded-2xl border border-slate-800">
               <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                <Info className="w-5 h-5 text-blue-600" /> Fun vs. Science
+                <Info className="w-5 h-5 text-blue-600" /> Entertainment Purpose Only
               </h3>
               <p className="text-slate-400 text-sm leading-relaxed">
-                While based on actual linguistic patterns, the **Username IQ Checker** is primarily a social benchmark tool intended for entertainment and engagement. It is not a clinical assessment. For a more accurate measure of your cognitive performance, please take our <a href="/iq-test" className="text-blue-600 font-bold hover:underline">Standard IQ Test</a>.
+                The **Username IQ Checker** is a social heuristic tool designed for entertainment. It analyzes linguistic complexity in handles but does not measure actual cognitive ability. For a standardized assessment of fluid intelligence, please utilize our <a href="/iq-test" className="text-blue-600 font-bold hover:underline">Standard IQ Matrix Test</a>.
               </p>
             </div>
 

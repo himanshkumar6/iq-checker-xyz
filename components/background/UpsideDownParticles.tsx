@@ -1,6 +1,4 @@
-
 import React, { useEffect, useRef } from 'react';
-import { useStore } from '../../store/useStore';
 
 interface Particle {
   x: number;
@@ -15,7 +13,6 @@ interface Particle {
 
 const UpsideDownParticles: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const theme = useStore((state) => state.theme);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -28,7 +25,7 @@ const UpsideDownParticles: React.FC = () => {
     let particles: Particle[] = [];
     const isMobile = window.innerWidth < 768;
     const particleCount = isMobile ? 30 : 80;
-    
+
     // Check for reduced motion preference
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -70,7 +67,7 @@ const UpsideDownParticles: React.FC = () => {
       particles.forEach((p, i) => {
         // Fade in/out logic
         if (p.opacity < p.maxOpacity) p.opacity += 0.01;
-        
+
         p.x += p.vx;
         p.y += p.vy;
 
@@ -84,10 +81,10 @@ const UpsideDownParticles: React.FC = () => {
         const r = 255;
         const g = 45;
         const b = 85;
-        
+
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        
+
         // Add subtle glow
         ctx.shadowBlur = p.size * 2;
         ctx.shadowColor = `rgba(255, 45, 85, ${p.opacity * 0.5})`;
@@ -109,12 +106,12 @@ const UpsideDownParticles: React.FC = () => {
       window.removeEventListener('resize', resize);
       cancelAnimationFrame(animationFrameId);
     };
-  }, [theme]);
+  }, []);
 
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 pointer-events-none z-[-5] transition-opacity duration-1000 bg-transparent"
+      className="fixed inset-0 pointer-events-none z-0 transition-opacity duration-1000 bg-transparent"
       style={{ opacity: 0.6 }}
     />
   );

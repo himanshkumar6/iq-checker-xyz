@@ -1,16 +1,44 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { BLOG_ARTICLES } from '../constants';
-import { Clock, ArrowLeft, Share2, Facebook, Twitter, Link as LinkIcon, User, Calendar, ShieldCheck } from 'lucide-react';
+import { Clock, ArrowLeft, Share2, Facebook, Twitter, Link as LinkIcon, User, Calendar, ShieldCheck, Check } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { SEO } from '../lib/seo';
+import { shareToTwitter, shareToFacebook, copyToClipboard } from '../lib/share';
 
 const BlogPost: React.FC = () => {
   const { slug } = useParams();
   const article = BLOG_ARTICLES.find(a => a.slug === slug);
+  const [copied, setCopied] = useState(false);
 
-  if (!article) return <Navigate to="/blog" />;
+  if (!article) {
+    return (
+      <>
+        <SEO title="Article Not Found" noindex={true} />
+        <Navigate to="/blog" />
+      </>
+    );
+  }
+
+  const currentUrl = `${window.location.origin}/blog/${article.slug}`;
+  const shareText = `${article.title} - IQ Checker XYZ`;
+
+  const handleTwitterShare = () => {
+    shareToTwitter(shareText, currentUrl);
+  };
+
+  const handleFacebookShare = () => {
+    shareToFacebook(currentUrl);
+  };
+
+  const handleCopyLink = async () => {
+    const success = await copyToClipboard(currentUrl);
+    if (success) {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
 
   return (
     <article className="container mx-auto px-4 py-12 max-w-4xl">
@@ -83,9 +111,14 @@ const BlogPost: React.FC = () => {
             <div className="sticky top-32">
               <h4 className="font-bold mb-6 text-sm uppercase tracking-widest text-slate-400">Distribute Wisdom</h4>
               <div className="flex flex-row lg:flex-col gap-4">
-                <ShareButton icon={<Twitter />} color="text-[#1DA1F2]" label="Tweet" />
-                <ShareButton icon={<Facebook />} color="text-[#1877F2]" label="Share" />
-                <ShareButton icon={<LinkIcon />} color="text-slate-500" label="Copy Link" />
+                <ShareButton icon={<Twitter />} color="text-[#1DA1F2]" label="Tweet" onClick={handleTwitterShare} />
+                <ShareButton icon={<Facebook />} color="text-[#1877F2]" label="Share" onClick={handleFacebookShare} />
+                <ShareButton
+                  icon={copied ? <Check /> : <LinkIcon />}
+                  color={copied ? "text-green-500" : "text-slate-500"}
+                  label={copied ? "Copied!" : "Copy Link"}
+                  onClick={handleCopyLink}
+                />
               </div>
 
               <div className="mt-12">
@@ -106,8 +139,11 @@ const BlogPost: React.FC = () => {
   );
 };
 
-const ShareButton = ({ icon, color, label }: { icon: React.ReactNode, color: string, label: string }) => (
-  <button className={`p-4 glass rounded-2xl hover:scale-105 transition-all flex items-center justify-center gap-3 w-full group ${color}`}>
+const ShareButton = ({ icon, color, label, onClick }: { icon: React.ReactNode, color: string, label: string, onClick: () => void }) => (
+  <button
+    onClick={onClick}
+    className={`p-4 glass rounded-2xl hover:scale-105 transition-all flex items-center justify-center gap-3 w-full group ${color}`}
+  >
     {React.cloneElement(icon as React.ReactElement<any>, { className: 'w-5 h-5' })}
     <span className="lg:hidden font-bold text-xs">{label}</span>
   </button>
