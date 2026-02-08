@@ -5,76 +5,203 @@ import { Brain, ArrowRight, ArrowLeft, RefreshCw, Share2, Trophy, Medal, Star, Z
 import { SEO } from '../lib/seo';
 import { IQ_QUESTIONS } from '../constants';
 import { useStore } from '../store/useStore';
-import { IQResult } from '../types';
+import { IQResult, Question } from '../types';
 import { shareResult, downloadResultImage } from '../lib/share';
+import DifficultyIndicator from '../components/DifficultyIndicator';
+
+const IQ_TEST_VERSION = "2.0";
+const SEEN_STORAGE_KEY = 'iq_test_seen_questions';
+const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
+
+interface LevelStats {
+  served: number;
+  correct: number;
+  totalTime: number;
+}
 
 const IQTest: React.FC = () => {
   const [step, setStep] = useState<'intro' | 'testing' | 'results'>('intro');
-  const [activeQuestions, setActiveQuestions] = useState<typeof IQ_QUESTIONS>([]);
+  const [sessionQuestions, setSessionQuestions] = useState<Question[]>([]);
   const [currentIdx, setCurrentIdx] = useState(0);
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [showFeedback, setShowFeedback] = useState(false);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [timer, setTimer] = useState(0);
+  const [questionStartTime, setQuestionStartTime] = useState(0);
   const [copied, setCopied] = useState(false);
+
+  // Adaptive State
+  const [difficulty, setDifficulty] = useState<1 | 2 | 3>(2);
+  const [rollingHistory, setRollingHistory] = useState<boolean[]>([]);
+  const [levelStats, setLevelStats] = useState<Record<number, LevelStats>>({
+    1: { served: 0, correct: 0, totalTime: 0 },
+    2: { served: 0, correct: 0, totalTime: 0 },
+    3: { served: 0, correct: 0, totalTime: 0 },
+  });
+
   const setIqResult = useStore((state) => state.setIqResult);
   const lastResult = useStore((state) => state.lastIqResult);
 
   useEffect(() => {
     let interval: any;
-    if (step === 'testing') {
+    if (step === 'testing' && !showFeedback) {
       interval = setInterval(() => setTimer(t => t + 1), 1000);
     }
     return () => clearInterval(interval);
-  }, [step]);
+  }, [step, showFeedback]);
+
+  // Internal Analytics Logging
+  useEffect(() => {
+    if (step === 'results') {
+      console.log('--- INTERNAL ASSESSMENT ANALYTICS ---');
+      console.table(levelStats);
+    }
+  }, [step, levelStats]);
+
+  const getSeenQuestions = (): Record<string, number> => {
+    try {
+      const seen = JSON.parse(localStorage.getItem(SEEN_STORAGE_KEY) || '{}');
+      const now = Date.now();
+      // Clean up old entries
+      const cleaned = Object.entries(seen).reduce((acc, [id, ts]) => {
+        if (now - (ts as number) < THIRTY_DAYS_MS) {
+          acc[id] = ts as number;
+        }
+        return acc;
+      }, {} as Record<string, number>);
+      return cleaned;
+    } catch {
+      return {};
+    }
+  };
+
+  const markQuestionAsSeen = (id: string) => {
+    const seen = getSeenQuestions();
+    seen[id] = Date.now();
+    localStorage.setItem(SEEN_STORAGE_KEY, JSON.stringify(seen));
+  };
+
+  const selectNextQuestion = (
+    currentPool: Question[],
+    targetDifficulty: number,
+    excludedIds: string[],
+    prevCategory?: string
+  ): Question => {
+    const seenMap = getSeenQuestions();
+
+    // 1. Filter by difficulty
+    let candidates = currentPool.filter(q => q.difficultyLevel === targetDifficulty && !excludedIds.includes(q.id));
+
+    // 2. Exclude recently seen (30 days)
+    let freshCandidates = candidates.filter(q => !seenMap[q.id]);
+
+    // 3. Fallback to older seen if pool exhausted
+    if (freshCandidates.length === 0) {
+      freshCandidates = candidates.sort((a, b) => (seenMap[a.id] || 0) - (seenMap[b.id] || 0));
+    }
+
+    // 4. Weighted randomness: Avoid same category > 2 times, prefer different
+    // We'll pick from top 3 candidates to maintain variety
+    const topCandidates = freshCandidates.slice(0, 5);
+    const categoryFiltered = topCandidates.filter(q => q.category !== prevCategory);
+
+    const finalSelection = categoryFiltered.length > 0
+      ? categoryFiltered[Math.floor(Math.random() * categoryFiltered.length)]
+      : freshCandidates[0];
+
+    return finalSelection || currentPool[Math.floor(Math.random() * currentPool.length)];
+  };
 
   const handleStart = () => {
-    const STORAGE_KEY = 'usedQuestions_iq_test';
     const TEST_SIZE = 15;
+    const initialDifficulty = 2;
 
-    let usedIds: string[] = [];
-    try {
-      usedIds = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-    } catch (e) {
-      usedIds = [];
+    // Initialize session with 3 questions at Level 2
+    let session: Question[] = [];
+    let excluded: string[] = [];
+
+    for (let i = 0; i < 3; i++) {
+      const q = selectNextQuestion(IQ_QUESTIONS, initialDifficulty, excluded);
+      session.push(q);
+      excluded.push(q.id);
     }
 
-    let available = IQ_QUESTIONS.filter(q => !usedIds.includes(q.id));
-
-    if (available.length < TEST_SIZE) {
-      usedIds = [];
-      available = [...IQ_QUESTIONS];
-    }
-
-    const shuffled = [...available].sort(() => Math.random() - 0.5);
-    const selected = shuffled.slice(0, TEST_SIZE);
-
-    // Update tracking
-    const newUsedIds = [...usedIds, ...selected.map(q => q.id)];
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(newUsedIds));
-
-    setActiveQuestions(selected);
+    setSessionQuestions(session);
+    setDifficulty(initialDifficulty);
+    setRollingHistory([]);
+    setLevelStats({
+      1: { served: 0, correct: 0, totalTime: 0 },
+      2: { served: 0, correct: 0, totalTime: 0 },
+      3: { served: 0, correct: 0, totalTime: 0 },
+    });
     setStep('testing');
     setCurrentIdx(0);
     setAnswers({});
     setShowFeedback(false);
     setSelectedOption(null);
     setTimer(0);
+    setQuestionStartTime(0);
   };
 
   const handleSelect = (optionIdx: number) => {
     if (showFeedback) return;
-    const question = activeQuestions[currentIdx];
+    const question = sessionQuestions[currentIdx];
+    const isCorrect = optionIdx === question.correctAnswer;
+    const timeSpent = timer - questionStartTime;
+
     setAnswers({ ...answers, [question.id]: optionIdx });
     setSelectedOption(optionIdx);
     setShowFeedback(true);
+    markQuestionAsSeen(question.id);
+
+    // Update Analytics & Rolling History
+    setRollingHistory(prev => {
+      const next = [...prev, isCorrect];
+      return next.slice(-5);
+    });
+
+    setLevelStats(prev => ({
+      ...prev,
+      [question.difficultyLevel]: {
+        served: prev[question.difficultyLevel].served + 1,
+        correct: prev[question.difficultyLevel].correct + (isCorrect ? 1 : 0),
+        totalTime: prev[question.difficultyLevel].totalTime + timeSpent
+      }
+    }));
   };
 
   const handleNext = () => {
-    if (currentIdx < activeQuestions.length - 1) {
+    const TEST_SIZE = 15;
+
+    if (currentIdx < TEST_SIZE - 1) {
+      // Logic for picking the NEXT question if it's not already in sessionQuestions
+      if (!sessionQuestions[currentIdx + 1]) {
+        // Evaluate difficulty adjustment after 3 questions
+        let nextDifficulty = difficulty;
+        if (currentIdx + 1 >= 3) {
+          const accuracy = rollingHistory.filter(Boolean).length / (rollingHistory.length || 1);
+          if (accuracy >= 0.8 && difficulty < 3) {
+            nextDifficulty = (difficulty + 1) as 1 | 2 | 3;
+          } else if (accuracy < 0.45 && difficulty > 1) {
+            nextDifficulty = (difficulty - 1) as 1 | 2 | 3;
+          }
+        }
+
+        const nextQ = selectNextQuestion(
+          IQ_QUESTIONS,
+          nextDifficulty,
+          sessionQuestions.map(q => q.id),
+          sessionQuestions[currentIdx].category
+        );
+
+        setSessionQuestions(prev => [...prev, nextQ]);
+        setDifficulty(nextDifficulty);
+      }
+
       setCurrentIdx(currentIdx + 1);
       setShowFeedback(false);
       setSelectedOption(null);
+      setQuestionStartTime(timer);
     } else {
       calculateResults();
     }
@@ -82,16 +209,15 @@ const IQTest: React.FC = () => {
 
   const calculateResults = () => {
     let correct = 0;
-    activeQuestions.forEach(q => {
+    sessionQuestions.forEach(q => {
       if (answers[q.id] === q.correctAnswer) correct++;
     });
 
-    const score = Math.round((correct / activeQuestions.length) * 100);
+    const score = Math.round((correct / sessionQuestions.length) * 100);
 
     const result: IQResult = {
       score,
-      level: score >= 90 ? 'Excellent' : score >= 70 ? 'Strong' : score >= 50 ? 'Balanced' : 'Needs Practice',
-      percentile: correct // Using correct count instead of percentile for internal logic
+      level: score >= 90 ? 'High Accuracy' : score >= 70 ? 'Strong Reasoning' : score >= 50 ? 'Developing' : 'Progressing',
     };
     setIqResult(result);
     setStep('results');
@@ -111,7 +237,7 @@ const IQTest: React.FC = () => {
       'Logical Reasoning Assessment',
       `${lastResult.score}%`,
       'ACCURACY',
-      `CORRECT: ${lastResult.percentile} / ${activeQuestions.length || 15} • IQCHECKERXYZ.COMPRESSPDFTO200KB.ONLINE`,
+      `CORRECT: ${Math.round((lastResult.score / 100) * 15)} / 15 • IQCHECKERXYZ.COMPRESSPDFTO200KB.ONLINE`,
       `reasoning-result-${lastResult.score}.png`
     );
   };
@@ -139,7 +265,7 @@ const IQTest: React.FC = () => {
     ]
   };
 
-  const currentQuestion = activeQuestions[currentIdx] || IQ_QUESTIONS[0];
+  const currentQuestion = sessionQuestions[currentIdx] || IQ_QUESTIONS[0];
 
   return (
     <div className="container mx-auto px-4 max-w-4xl py-12">
@@ -162,8 +288,8 @@ const IQTest: React.FC = () => {
             <div className="w-24 h-24 bg-blue-600 rounded-3xl mx-auto flex items-center justify-center mb-8 shadow-2xl shadow-blue-600/30">
               <Brain className="w-12 h-12 text-white" />
             </div>
-            <h1 className="text-4xl font-black mb-6">Logical Reasoning Assessment</h1>
-            <p className="text-lg text-slate-400 mb-12 max-w-lg mx-auto leading-relaxed">
+            <h1 className="text-4xl font-black mb-6 uppercase tracking-tight">Logical Reasoning Assessment</h1>
+            <p className="text-lg text-slate-400 mb-12 max-w-lg mx-auto leading-relaxed font-medium">
               Measure your accuracy in pattern recognition, logical deduction, and math. Every question now includes immediate feedback to help you understand the underlying logic.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
@@ -201,8 +327,8 @@ const IQTest: React.FC = () => {
           >
             <div className="flex justify-between items-center mb-8">
               <div className="flex flex-col">
-                <span className="text-sm font-bold text-blue-600 uppercase">Step</span>
-                <span className="text-2xl font-black">{currentIdx + 1} / {activeQuestions.length || 15}</span>
+                <span className="text-sm font-bold text-blue-600 uppercase">Task</span>
+                <span className="text-2xl font-black tracking-tight">{currentIdx + 1} / 15</span>
               </div>
               <div className="flex flex-col items-end">
                 <span className="text-sm font-bold text-slate-400 uppercase">Timer</span>
@@ -215,15 +341,19 @@ const IQTest: React.FC = () => {
             <div className="w-full bg-slate-200 dark:bg-slate-800 h-3 rounded-full mb-12 overflow-hidden">
               <motion.div
                 initial={{ width: 0 }}
-                animate={{ width: `${((currentIdx + 1) / (activeQuestions.length || 15)) * 100}%` }}
+                animate={{ width: `${((currentIdx + 1) / 15) * 100}%` }}
                 className="h-full bg-blue-600"
               />
             </div>
 
             <div className="glass rounded-[2rem] p-8 md:p-12 mb-8 relative overflow-hidden">
-              <span className="px-3 py-1 bg-slate-100 dark:bg-slate-900 text-blue-600 text-xs font-bold rounded-full uppercase tracking-widest mb-4 inline-block">
-                {currentQuestion.type}
-              </span>
+              <div className="flex items-center gap-2 mb-4">
+                <span className="px-3 py-1 bg-slate-100 dark:bg-slate-900 text-blue-600 text-[10px] font-black rounded-full uppercase tracking-tighter shadow-sm border border-slate-200 dark:border-slate-800">
+                  {currentQuestion.category}
+                </span>
+                <span className="text-slate-400 font-bold">•</span>
+                <DifficultyIndicator level={currentQuestion.difficultyLevel} />
+              </div>
               <h2 className="text-2xl font-bold mb-8 leading-tight">{currentQuestion.text}</h2>
 
               <div className="grid grid-cols-1 gap-4 mb-8">
@@ -231,7 +361,7 @@ const IQTest: React.FC = () => {
                   const isSelected = selectedOption === idx;
                   const isCorrect = idx === currentQuestion.correctAnswer;
 
-                  let btnClass = "bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800 hover:border-blue-600";
+                  let btnClass = "bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800 hover:border-blue-600 active:scale-[0.98]";
                   if (showFeedback) {
                     if (isCorrect) btnClass = "bg-emerald-500/10 border-emerald-500 text-emerald-600";
                     else if (isSelected) btnClass = "bg-red-500/10 border-red-500 text-red-600";
@@ -246,8 +376,16 @@ const IQTest: React.FC = () => {
                       className={`w-full p-6 text-left rounded-2xl border-2 transition-all font-bold flex items-center justify-between group ${btnClass}`}
                     >
                       <span>{opt}</span>
-                      {showFeedback && isCorrect && <Check className="w-5 h-5" />}
-                      {showFeedback && isSelected && !isCorrect && <HelpCircle className="w-5 h-5" />}
+                      {showFeedback && isCorrect && (
+                        <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}>
+                          <Check className="w-6 h-6 p-1 bg-emerald-500 text-white rounded-full shadow-lg shadow-emerald-500/20" />
+                        </motion.div>
+                      )}
+                      {showFeedback && isSelected && !isCorrect && (
+                        <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}>
+                          <HelpCircle className="w-6 h-6 p-1 bg-red-500 text-white rounded-full shadow-lg shadow-red-500/20" />
+                        </motion.div>
+                      )}
                     </button>
                   );
                 })}
@@ -260,24 +398,24 @@ const IQTest: React.FC = () => {
                     animate={{ opacity: 1, height: 'auto' }}
                     className="pt-6 border-t border-slate-100 dark:border-slate-800"
                   >
-                    <div className="flex gap-4 p-6 bg-slate-50 dark:bg-slate-900/50 rounded-2xl">
-                      <div className={`w-10 h-10 rounded-xl flex-shrink-0 flex items-center justify-center ${selectedOption === currentQuestion.correctAnswer ? 'bg-emerald-500 text-white' : 'bg-blue-600 text-white'}`}>
+                    <div className="flex gap-4 p-6 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-100 dark:border-slate-800">
+                      <div className={`w-10 h-10 rounded-xl flex-shrink-0 flex items-center justify-center shadow-lg ${selectedOption === currentQuestion.correctAnswer ? 'bg-emerald-500 text-white shadow-emerald-500/30' : 'bg-red-500 text-white shadow-red-500/30'}`}>
                         {selectedOption === currentQuestion.correctAnswer ? <Check className="w-6 h-6" /> : <Info className="w-6 h-6" />}
                       </div>
                       <div>
                         <p className="text-xs font-black uppercase tracking-widest mb-1 text-slate-400">
-                          {selectedOption === currentQuestion.correctAnswer ? 'Logic Verified' : 'Explanation'}
+                          {selectedOption === currentQuestion.correctAnswer ? 'Logic Verified' : 'Logical Explanation'}
                         </p>
                         <p className="text-sm font-bold leading-relaxed">
-                          {selectedOption === currentQuestion.correctAnswer ? 'Correct — good logical reasoning.' : currentQuestion.explanation}
+                          {currentQuestion.explanation}
                         </p>
                       </div>
                     </div>
                     <button
                       onClick={handleNext}
-                      className="w-full mt-8 p-5 bg-blue-600 text-white font-black rounded-2xl shadow-lg hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
+                      className="w-full mt-8 p-5 bg-blue-600 text-white font-black rounded-2xl shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
                     >
-                      {currentIdx === IQ_QUESTIONS.length - 1 ? 'Go to Results' : 'Next Question'} <ArrowRight className="w-5 h-5" />
+                      {currentIdx === 14 ? 'View Final Report' : 'Next Challenge'} <ArrowRight className="w-5 h-5" />
                     </button>
                   </motion.div>
                 )}
@@ -293,13 +431,13 @@ const IQTest: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             className="text-center"
           >
-            <div className="max-w-2xl mx-auto mb-12 glass rounded-[3rem] p-8 md:p-12">
-              <h2 className="text-3xl font-black mb-12">Assessment Summary</h2>
+            <div className="max-w-2xl mx-auto mb-12 glass rounded-[3rem] p-8 md:p-12 shadow-2xl shadow-blue-600/5">
+              <h2 className="text-3xl font-black mb-12 uppercase tracking-tight">Assessment Report</h2>
 
               <div className="flex flex-col md:flex-row items-center justify-center gap-12 mb-12">
                 {/* Circular Performance Chart */}
                 <div className="relative w-48 h-48">
-                  <svg className="w-full h-full transform -rotate-90">
+                  <svg className="w-full h-full transform -rotate-90 filter drop-shadow-xl">
                     <circle
                       cx="96"
                       cy="96"
@@ -318,40 +456,43 @@ const IQTest: React.FC = () => {
                       strokeDasharray={552.92}
                       initial={{ strokeDashoffset: 552.92 }}
                       animate={{ strokeDashoffset: 552.92 - (552.92 * (lastResult.score / 100)) }}
-                      transition={{ duration: 1.5, ease: "easeOut" }}
+                      transition={{ duration: 2, ease: "circOut" }}
                       fill="transparent"
                       strokeLinecap="round"
                       className="text-blue-600"
                     />
                   </svg>
                   <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <span className="text-4xl font-black">{lastResult.score}%</span>
-                    <span className="text-[10px] font-black uppercase text-slate-400">Accuracy</span>
+                    <span className="text-5xl font-black tracking-tighter">{lastResult.score}%</span>
+                    <span className="text-[10px] font-black uppercase text-slate-400 tracking-widest mt-1">Accuracy</span>
                   </div>
                 </div>
 
-                <div className="flex-1 space-y-6 text-left">
-                  <div className="p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 flex justify-between items-center">
-                    <span className="text-sm font-bold text-slate-400 uppercase tracking-widest">Logic Accuracy</span>
-                    <span className="font-black text-xl text-blue-600">{lastResult.level}</span>
+                <div className="flex-1 space-y-6 text-left w-full">
+                  <div className="p-6 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 flex justify-between items-center shadow-sm">
+                    <span className="text-xs font-black text-slate-400 uppercase tracking-widest">Logic Rank</span>
+                    <span className="font-black text-xl text-blue-600 italic tracking-tight">{lastResult.level}</span>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="p-4 bg-emerald-500/5 rounded-2xl border border-emerald-500/20 text-center">
-                      <p className="text-[10px] font-black text-emerald-600 uppercase mb-1">Correct</p>
-                      <p className="text-2xl font-black text-emerald-600">{lastResult.percentile}</p>
+                    <div className="p-5 bg-emerald-500/5 rounded-2xl border border-emerald-500/20 text-center shadow-sm">
+                      <p className="text-[10px] font-black text-emerald-600 uppercase mb-1 tracking-widest">Correct</p>
+                      <p className="text-3xl font-black text-emerald-600 leading-none">
+                        {Math.round((lastResult.score / 100) * 15)}
+                      </p>
                     </div>
-                    <div className="p-4 bg-red-500/5 rounded-2xl border border-red-500/20 text-center">
-                      <p className="text-[10px] font-black text-red-600 uppercase mb-1">Incorrect</p>
-                      <p className="text-2xl font-black text-red-600">{(activeQuestions.length || 15) - lastResult.percentile}</p>
+                    <div className="p-5 bg-red-500/5 rounded-2xl border border-red-500/20 text-center shadow-sm">
+                      <p className="text-[10px] font-black text-red-600 uppercase mb-1 tracking-widest">Incorrect</p>
+                      <p className="text-3xl font-black text-red-600 leading-none">
+                        {15 - Math.round((lastResult.score / 100) * 15)}
+                      </p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="p-6 bg-blue-900/10 rounded-2xl border border-blue-900/20 mb-12">
-                <p className="text-xs text-slate-500 leading-relaxed font-bold">
-                  Results are based on this quiz only. This is a self-assessment for educational and entertainment purposes.
-                  Not an IQ test or diagnostic evaluation.
+              <div className="p-6 bg-blue-600/5 rounded-3xl border border-blue-600/10 mb-2">
+                <p className="text-[11px] text-slate-500 leading-relaxed font-bold italic">
+                  Disclaimer: Results reflect your responses during this session only. This activity is for educational and practice purposes. It does not constitute an official IQ score or clinical psychological evaluation.
                 </p>
               </div>
 

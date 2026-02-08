@@ -27,7 +27,7 @@ const Navbar: React.FC = () => {
   ];
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'glass py-3' : 'bg-transparent py-5'}`}>
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-slate-950/80 backdrop-blur-xl py-3 border-none shadow-none' : 'bg-transparent py-5'}`}>
       <div className="container mx-auto px-4 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2 group">
           <div className="p-2 bg-blue-600 rounded-xl group-hover:scale-110 transition-transform">
@@ -45,8 +45,8 @@ const Navbar: React.FC = () => {
               key={link.path}
               to={link.path}
               className={`text-sm font-semibold transition-colors hover:text-blue-600 ${location.pathname === link.path || (link.path !== '/' && location.pathname.startsWith(link.path))
-                  ? 'text-blue-600'
-                  : 'text-slate-400'
+                ? 'text-blue-600'
+                : 'text-slate-400'
                 }`}
             >
               {link.name}
@@ -75,7 +75,7 @@ const Navbar: React.FC = () => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="absolute top-full left-0 right-0 glass border-t border-slate-800 p-6 lg:hidden flex flex-col gap-4"
+            className="absolute top-full left-0 right-0 bg-slate-950/95 backdrop-blur-2xl p-6 lg:hidden flex flex-col gap-4 border-none shadow-none"
           >
             {navLinks.map((link) => (
               <Link

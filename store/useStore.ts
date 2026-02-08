@@ -4,6 +4,7 @@ import { persist } from 'zustand/middleware';
 import { IQResult, ReactionAttempt } from '../types';
 
 interface AppState {
+  theme: any;
   lastIqResult: IQResult | null;
   reactionHistory: ReactionAttempt[];
   setIqResult: (result: IQResult) => void;

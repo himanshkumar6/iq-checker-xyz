@@ -10,13 +10,37 @@
 html,
 body,
 #root {
-  height: 100%;
   margin: 0;
   padding: 0;
-  background-color: #020617; /* Explicit slate-950 */
-  color: #f1f5f9; /* Explicit slate-100 */
-  overscroll-behavior: none;
-  -webkit-overflow-scrolling: touch;
+  background-color: #020617; /* slate-950 */
+  overflow-x: hidden;
+}
+
+/* Scoped Resets */
+nav,
+header,
+footer {
+  border: none !important;
+}
+
+.red-cursor-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background-color: #ef4444;
+  position: fixed;
+  pointer-events: none;
+  z-index: 40;
+}
+
+.red-cursor-particle {
+  border-radius: 9999px;
+  background-color: rgba(239, 68, 68, 0.35); /* red-500 @ 0.35 opacity */
+  position: fixed;
+  pointer-events: none;
+  z-index: 39;
+  filter: blur(0.5px);
+  box-shadow: 0 0 6px rgba(239, 68, 68, 0.25); /* Ambient ember glow */
 }
 
 body {

@@ -21,8 +21,8 @@ import Contact from './pages/legal/Contact';
 import DMCA from './pages/legal/DMCA';
 import UpsideDownParticles from './components/background/UpsideDownParticles';
 import WhiteFlakesBackground from './components/background/WhiteFlakesBackground';
-import CursorGlow from './components/cursor/CursorGlow';
 import { loadGA, trackPageView } from "./lib/analytics";
+import CursorGlow from './components/cursor/CursorGlow';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -46,7 +46,7 @@ const App: React.FC = () => {
   }, [location.pathname]);
 
   return (
-    <div className="min-h-[100dvh] bg-slate-950 relative overflow-x-hidden">
+    <div className="min-h-dvh bg-slate-950 relative overflow-x-hidden">
       <ScrollToTop />
 
       {/* Background Layers */}
@@ -57,7 +57,7 @@ const App: React.FC = () => {
       </div>
 
       {/* Content Layers */}
-      <div className="relative z-10 flex flex-col min-h-[100dvh]">
+      <div className="relative z-10 flex flex-col min-h-dvh">
         <Navbar />
 
         <main className="grow pt-20">

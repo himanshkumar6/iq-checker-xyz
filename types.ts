@@ -2,7 +2,8 @@
 export interface Question {
   id: string;
   text: string;
-  type: 'logic' | 'pattern' | 'math';
+  category: 'LOGIC' | 'PATTERN' | 'MATH' | 'VISUAL';
+  difficultyLevel: 1 | 2 | 3;
   options: string[];
   correctAnswer: number;
   explanation: string;
@@ -20,7 +21,6 @@ export interface BlogArticle {
 export interface IQResult {
   score: number;
   level: string;
-  percentile: number;
 }
 
 export interface ReactionAttempt {

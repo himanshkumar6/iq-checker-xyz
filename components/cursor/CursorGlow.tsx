@@ -41,7 +41,7 @@ const CursorGlow: React.FC = () => {
 
     const handleMouseMove = (e: MouseEvent) => {
       mousePos.current = { x: e.clientX, y: e.clientY };
-      
+
       // Spawn trail particles on move
       if (Math.random() > 0.6) {
         particles.push({
@@ -69,7 +69,7 @@ const CursorGlow: React.FC = () => {
       // Draw particle trail
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       const isDarkMode = document.documentElement.classList.contains('dark');
-      
+
       particles = particles.filter(p => p.life > 0);
       particles.forEach(p => {
         p.x += p.vx;
@@ -83,7 +83,7 @@ const CursorGlow: React.FC = () => {
         const alpha = Math.max(0, p.life);
         ctx.beginPath();
         ctx.arc(p.x, p.y, radius, 0, Math.PI * 2);
-        
+
         if (isDarkMode) {
           ctx.fillStyle = `rgba(255, 45, 85, ${alpha * 0.5})`;
         } else {
