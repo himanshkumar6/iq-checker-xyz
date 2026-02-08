@@ -1,10 +1,11 @@
 
 export interface Question {
-  id: number;
+  id: string;
   text: string;
   type: 'logic' | 'pattern' | 'math';
   options: string[];
   correctAnswer: number;
+  explanation: string;
 }
 
 export interface BlogArticle {
