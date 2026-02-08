@@ -60,6 +60,7 @@ const Footer: React.FC = () => {
               <li><Link to="/username-iq-checker" className="hover:text-blue-600">Username IQ Analytics</Link></li>
               <li><Link to="/reaction-test" className="hover:text-blue-600">Reaction Speed Test</Link></li>
               <li><Link to="/mental-age-test" className="hover:text-blue-600">Mental Age Assessment</Link></li>
+              <li><Link to="/brain-games" className="hover:text-blue-600">Brain Games</Link></li>
             </ul>
           </div>
 

@@ -9,6 +9,10 @@ import MentalAgeTest from './pages/MentalAgeTest';
 import UsernameIQPage from './pages/UsernameIQPage';
 import Blog from './pages/Blog';
 import BlogPost from './pages/BlogPost';
+import BrainGames from './pages/BrainGames';
+import PatternRecognition from './pages/games/PatternRecognition';
+import SpeedMath from './pages/games/SpeedMath';
+import MemoryGrid from './pages/games/MemoryGrid';
 import AboutUs from './pages/legal/AboutUs';
 import PrivacyPolicy from './pages/legal/PrivacyPolicy';
 import Terms from './pages/legal/Terms';
@@ -63,6 +67,10 @@ const App: React.FC = () => {
             <Route path="/reaction-test" element={<ReactionTest />} />
             <Route path="/mental-age-test" element={<MentalAgeTest />} />
             <Route path="/username-iq-checker" element={<UsernameIQPage />} />
+            <Route path="/brain-games" element={<BrainGames />} />
+            <Route path="/brain-games/pattern-recognition" element={<PatternRecognition />} />
+            <Route path="/brain-games/speed-math" element={<SpeedMath />} />
+            <Route path="/brain-games/memory-grid" element={<MemoryGrid />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/about-us" element={<AboutUs />} />
