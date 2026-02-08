@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect } from 'react';
 
 export interface SEOProps {
   title: string;
@@ -19,25 +19,72 @@ export const SEO: React.FC<SEOProps> = ({
   ogDescription,
   noindex = false
 }) => {
-  const currentUrl = typeof window !== 'undefined' ? window.location.href : 'https://iqcheckerxyz.compresspdfto200kb.online/';
+  useEffect(() => {
+    // Update document title directly
+    document.title = title;
 
-  return (
-    <>
-      <title>{title}</title>
-      <meta name="description" content={description} />
-      {noindex && <meta name="robots" content="noindex, nofollow" />}
-      {canonical && !noindex && <link rel="canonical" href={canonical} />}
+    // Helper to set or update meta tag
+    const setMetaTag = (name: string, content: string, isProperty = false) => {
+      const attribute = isProperty ? 'property' : 'name';
+      let element = document.querySelector(`meta[${attribute}="${name}"]`) as HTMLMetaElement;
 
-      {/* Open Graph */}
-      <meta property="og:title" content={ogTitle || title} />
-      <meta property="og:description" content={ogDescription || description} />
-      <meta property="og:type" content={ogType} />
-      <meta property="og:url" content={currentUrl} />
+      if (!element) {
+        element = document.createElement('meta');
+        element.setAttribute(attribute, name);
+        document.head.appendChild(element);
+      }
 
-      {/* Twitter */}
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content={ogTitle || title} />
-      <meta name="twitter:description" content={ogDescription || description} />
-    </>
-  );
+      element.setAttribute('content', content);
+    };
+
+    // Helper to set or update link tag
+    const setLinkTag = (rel: string, href: string) => {
+      let element = document.querySelector(`link[rel="${rel}"]`) as HTMLLinkElement;
+
+      if (!element) {
+        element = document.createElement('link');
+        element.rel = rel;
+        document.head.appendChild(element);
+      }
+
+      element.href = href;
+    };
+
+    // Helper to remove meta tag
+    const removeMetaTag = (name: string, isProperty = false) => {
+      const attribute = isProperty ? 'property' : 'name';
+      const element = document.querySelector(`meta[${attribute}="${name}"]`);
+      if (element) element.remove();
+    };
+
+    // Set description
+    setMetaTag('description', description);
+
+    // Handle robots meta
+    if (noindex) {
+      setMetaTag('robots', 'noindex, nofollow');
+    } else {
+      removeMetaTag('robots');
+    }
+
+    // Set canonical
+    if (canonical && !noindex) {
+      setLinkTag('canonical', canonical);
+    }
+
+    // Open Graph tags
+    setMetaTag('og:title', ogTitle || title, true);
+    setMetaTag('og:description', ogDescription || description, true);
+    setMetaTag('og:type', ogType, true);
+    setMetaTag('og:url', typeof window !== 'undefined' ? window.location.href : '', true);
+
+    // Twitter tags
+    setMetaTag('twitter:card', 'summary_large_image');
+    setMetaTag('twitter:title', ogTitle || title);
+    setMetaTag('twitter:description', ogDescription || description);
+
+  }, [title, description, canonical, ogType, ogTitle, ogDescription, noindex]);
+
+  // This component doesn't render anything to the DOM
+  return null;
 };
