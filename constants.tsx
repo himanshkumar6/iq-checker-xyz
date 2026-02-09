@@ -250,7 +250,9 @@ export const BLOG_ARTICLES: BlogArticle[] = [
 
 In this comprehensive guide, we explore the fascinating origins of the IQ test, tracing its journey from Alfred Binet's early diagnostic tools in France to the modern, highly sophisticated Wechsler Adult Intelligence Scale (WAIS) and Raven's Progressive Matrices used by psychologists today.We break down the different domains of intelligence measured by these tests, including verbal comprehension, perceptual reasoning, working memory, and processing speed.
 
-Understanding your IQ can provide valuable insights into your cognitive strengths and weaknesses.For instance, a high score in pattern recognition might suggest a natural aptitude for computer science or engineering, while strong verbal scores could point towards success in law or communications.However, it's crucial to remember that an IQ score is not a static ceiling on your potential; it's a benchmark of current cognitive state that can be influenced by education, environment, and mental training.We also discuss the "Flynn Effect"—the observed rise in average IQ scores over generations—and what it tells us about our evolving mental environment.`
+Understanding your IQ can provide valuable insights into your cognitive strengths and weaknesses.For instance, a high score in pattern recognition might suggest a natural aptitude for computer science or engineering, while strong verbal scores could point towards success in law or communications.However, it's crucial to remember that an IQ score is not a static ceiling on your potential; it's a benchmark of current cognitive state that can be influenced by education, environment, and mental training.We also discuss the "Flynn Effect"—the observed rise in average IQ scores over generations—and what it tells us about our evolving mental environment.`,
+    authorName: "Dr. Aris Vellan",
+    authorBio: "Dr. Aris Vellan is a data scientist specializing in psychometrics and cognitive modeling. With a background in computational neuroscience, he focuses on how digital assessments can be used to benchmark cognitive performance at scale."
   },
   {
     slug: 'good-iq-score',
@@ -262,7 +264,9 @@ Understanding your IQ can provide valuable insights into your cognitive strength
 
   However, interpreting these numbers requires an understanding of the bell curve and standard deviation.Each 15 - point jump(in most scales) represents one standard deviation from the mean.This means a person with an IQ of 130 is significantly different in their cognitive processing speed and pattern recognition capabilities than someone with an IQ of 100.
 
-In this article, we delve into the practical implications of these scores.Does a "High" IQ guarantee success ? Research suggests that while IQ is a strong predictor of academic performance and professional achievement in complex fields, it is just one facet of a multi - dimensional personality.We compare IQ with Emotional Intelligence(EQ) and "Grit"—the passion and perseverance for long - term goals.We also look at how high - IQ societies like Mensa use these scores to foster communities of like - minded intellectual peers.Understanding where you stand on the bell curve is not about superiority, but about understanding your unique cognitive profile.`
+In this article, we delve into the practical implications of these scores.Does a "High" IQ guarantee success ? Research suggests that while IQ is a strong predictor of academic performance and professional achievement in complex fields, it is just one facet of a multi - dimensional personality.We compare IQ with Emotional Intelligence(EQ) and "Grit"—the passion and perseverance for long - term goals.We also look at how high - IQ societies like Mensa use these scores to foster communities of like - minded intellectual peers.Understanding where you stand on the bell curve is not about superiority, but about understanding your unique cognitive profile.`,
+    authorName: "Sarah J. Miller",
+    authorBio: "Sarah J. Miller is an educational consultant and former psychometric analyst. She specializes in interpreting standardized scores and helping individuals understand their cognitive profiles within educational frameworks."
   },
   {
     slug: 'online-iq-accuracy',
@@ -274,7 +278,9 @@ In this article, we delve into the practical implications of these scores.Does a
 
 Our platform, IQ Checker XYZ, utilizes logical matrices, mathematical sequences, and pattern recognition puzzles that are closely modeled after the logic found in official psychometric batteries.By using a large, anonymized dataset, we can provide a highly reliable * estimate * of your cognitive standing.In this article, we break down the algorithm behind our scoring system and explain why consistency across different tests matters more than a single high score.
 
-We also expose the "junk science" found in many predatory online tests that promise inflated scores to drive engagement.A real IQ test should be challenging, culturally neutral, and based on fluid intelligence rather than general knowledge.Learn how to spot a legitimate assessment and how to use your results responsibly.Whether you're testing your logic for fun or looking for a benchmark before a professional exam, understanding the limitations and strengths of digital testing is key.`
+We also expose the "junk science" found in many predatory online tests that promise inflated scores to drive engagement.A real IQ test should be challenging, culturally neutral, and based on fluid intelligence rather than general knowledge.Learn how to spot a legitimate assessment and how to use your results responsibly.Whether you're testing your logic for fun or looking for a benchmark before a professional exam, understanding the limitations and strengths of digital testing is key.`,
+    authorName: "Dr. Aris Vellan",
+    authorBio: "Dr. Aris Vellan is a data scientist specializing in psychometrics and cognitive modeling. With a background in computational neuroscience, he focuses on how digital assessments can be used to benchmark cognitive performance at scale."
   },
   {
     slug: 'average-iq-by-age',
@@ -286,7 +292,9 @@ We also expose the "junk science" found in many predatory online tests that prom
 
 Raw fluid intelligence, which is what most IQ tests primarily measure, tends to peak in our late teens or early twenties. This is the period when our processing speed and working memory are at their most efficient. However, crystallized intelligence continues to grow well into our 50s, 60s, and even 70s as we become more adept at applying known logic to complex life situations.
 
-This article examines the data behind cognitive aging and offers evidence-based strategies to maintain a sharp mind throughout adulthood. We discuss "Cognitive Reserve" and how lifelong learning can delay the effects of age-related cognitive decline. By understanding how your age group's average IQ is calculated using age-normed scores (deviation IQ), you can better appreciate your own mental development. Whether you're a student looking to maximize your peak years or a senior focused on cognitive health, the science of aging intelligence offers fascinating insights into the human brain's plasticity.`
+This article examines the data behind cognitive aging and offers evidence-based strategies to maintain a sharp mind throughout adulthood. We discuss "Cognitive Reserve" and how lifelong learning can delay the effects of age-related cognitive decline. By understanding how your age group's average IQ is calculated using age-normed scores (deviation IQ), you can better appreciate your own mental development. Whether you're a student looking to maximize your peak years or a senior focused on cognitive health, the science of aging intelligence offers fascinating insights into the human brain's plasticity.`,
+    authorName: "Sarah J. Miller",
+    authorBio: "Sarah J. Miller is an educational consultant and former psychometric analyst. She specializes in interpreting standardized scores and helping individuals understand their cognitive profiles within educational frameworks."
   },
   {
     slug: 'mental-age-vs-iq',
@@ -298,7 +306,9 @@ This article examines the data behind cognitive aging and offers evidence-based 
 
 Mental age today is often discussed in the context of psychological and emotional maturity. It asks the question: Regardless of how fast your brain can solve a math problem, how mature is your approach to decision-making, social interaction, and stress? In this deep-dive, we compare the "Raw Brain Power" of IQ with the "Emotional Maturity" of mental age.
 
-We also look at our "Mental Age Test" on IQ Checker XYZ and explain how it uses psychological behavioral patterns to estimate your maturity level. While your IQ might be fixed at 130, your mental age might fluctuate based on your life experiences and emotional growth. Understanding this distinction can lead to better self-awareness and personal development.`
+We also look at our "Mental Age Test" on IQ Checker XYZ and explain how it uses psychological behavioral patterns to estimate your maturity level. While your IQ might be fixed at 130, your mental age might fluctuate based on your life experiences and emotional growth. Understanding this distinction can lead to better self-awareness and personal development.`,
+    authorName: "David Chen",
+    authorBio: "David Chen is a behavioral psychologist focusing on adult development and emotional maturity indices. His work explores the intersection of cognitive capacity and psychological resilience."
   },
   {
     slug: 'brain-training',
@@ -310,7 +320,9 @@ We also look at our "Mental Age Test" on IQ Checker XYZ and explain how it uses 
 
 In this article, we analyze the largest studies ever conducted on brain training. We look at the "N-Back" task, one of the few exercises that has shown some evidence of improving working memory and, by extension, fluid intelligence. We also explore the concept of "Neuroplasticity"—the brain's ability to reorganize itself by forming new neural connections throughout life.
 
-Rather than relying solely on apps, we provide a list of "High-Transfer" activities that have stronger scientific backing for boosting cognitive performance. These include learning complex new skills (like a second language or a musical instrument), intense physical exercise, and deep focus training. Discover how to build a brain training routine that actually works, and learn why variety is more important than repetition when it comes to mental agility.`
+Rather than relying solely on apps, we provide a list of "High-Transfer" activities that have stronger scientific backing for boosting cognitive performance. These include learning complex new skills (like a second language or a musical instrument), intense physical exercise, and deep focus training. Discover how to build a brain training routine that actually works, and learn why variety is more important than repetition when it comes to mental agility.`,
+    authorName: "Dr. Aris Vellan",
+    authorBio: "Dr. Aris Vellan is a data scientist specializing in psychometrics and cognitive modeling. With a background in computational neuroscience, he focuses on how digital assessments can be used to benchmark cognitive performance at scale."
   },
   {
     slug: 'increase-iq',
@@ -326,7 +338,9 @@ Rather than relying solely on apps, we provide a list of "High-Transfer" activit
 4. **Learning New Languages:** This is one of the most cognitively demanding tasks possible, as it requires the brain to navigate new sets of rules, sounds, and structures, significantly boosting executive function.
 5. **Quality Sleep and Nutrition:** We look at the correlation between REM sleep cycles and memory consolidation, along with the role of Omega-3 fatty acids in brain health.
 
-By implementing these five strategies, you can optimize your brain's performance and see significant improvements in your IQ test scores over time.`
+By implementing these five strategies, you can optimize your brain's performance and see significant improvements in your IQ test scores over time.`,
+    authorName: "Sarah J. Miller",
+    authorBio: "Sarah J. Miller is an educational consultant and former psychometric analyst. She specializes in interpreting standardized scores and helping individuals understand their cognitive profiles within educational frameworks."
   },
   {
     slug: 'logic-puzzles',
@@ -338,52 +352,100 @@ By implementing these five strategies, you can optimize your brain's performance
 
 In this article, we break down three of the world's most famous logic puzzles: Einstein's Riddle, the Monty Hall Problem, and the "Hardest Logic Puzzle Ever" by George Boolos. We don't just give you the answers; we explain the *thinking process* required to reach them. Understanding these logical frameworks is the best way to prepare for a formal IQ assessment.
 
-We also discuss why certain people find these puzzles easier than others. Is it a natural gift, or a learned skill? The answer is both. By practicing logical syllogisms and identifying common fallacies, you can "train" your brain to see patterns that others miss. This is the essence of fluid intelligence. Ready to test your limits? Dive into our analysis and see if you have what it takes to solve the unsolvable.`
+We also discuss why certain people find these puzzles easier than others. Is it a natural gift, or a learned skill? The answer is both. By practicing logical syllogisms and identifying common fallacies, you can "train" your brain to see patterns that others miss. This is the essence of fluid intelligence. Ready to test your limits? Dive into our analysis and see if you have what it takes to solve the unsolvable.`,
+    authorName: "David Chen",
+    authorBio: "David Chen is a behavioral psychologist focusing on adult development and emotional maturity indices. His work explores the intersection of cognitive capacity and psychological resilience."
   }
 ];
 
-export const FAQS = [
-  {
-    q: "What is IQ Checker XYZ?",
-    a: "IQ Checker XYZ is a world-class, premium suite of cognitive assessment tools designed to help you benchmark your brain's performance. Our mission is to provide accurate, science-backed insights into human intelligence through logic, mathematics, and reaction speed testing. Established in 2026, we utilize modern psychometric data to calibrate our tools, ensuring that users receive a reliable estimate of their cognitive standing in a fast, engaging digital format."
-  },
-  {
-    q: "How long does the IQ test take?",
-    a: "Our standard 15-question IQ assessment is designed to be completed in approximately 10 to 15 minutes. This timing is optimized to prevent mental fatigue while still providing enough depth to evaluate fluid intelligence. We recommend taking the test in a quiet environment free from distractions to ensure the highest degree of accuracy in your results."
-  },
-  {
-    q: "Is this test scientifically accurate?",
-    a: "While our tests are designed using industry-standard logic, pattern recognition principles, and psychometric matrices, they are intended for educational and entertainment purposes. A formal, clinical diagnosis of IQ must be administered by a licensed psychologist using standardized batteries like the WAIS-IV. However, IQ Checker XYZ provides a high-confidence estimate that aligns closely with professional screening tools."
-  },
-  {
-    q: "Can I take the test more than once?",
-    a: "Yes, you can retake the test. However, please be aware of the 'Practice Effect.' If you take the same test multiple times, you may see an artificially inflated score because your brain becomes familiar with the specific puzzles and questions. For the most accurate benchmark of your raw potential, your first attempt is usually the most telling."
-  },
-  {
-    q: "What is a 'Genius' IQ score?",
-    a: "In most standard distributions (where the mean is 100), a score of 140 or higher is often statistically categorized as 'Very Superior' or 'Genius' level potential. This typically represents the top 0.5% of the population. A score of 130+ is generally considered 'High Potential'."
-  },
-  {
-    q: "How is the reaction speed test measured?",
-    a: "Our reaction speed tool measures the precise millisecond delay between a visual stimulus on your screen (a color change) and your physical response (a click or tap). We use high-precision browser timers to filter out environmental lag, providing a reliable measure of your cognitive processing speed and neuromuscular efficiency."
-  },
-  {
-    q: "What is my mental age?",
-    a: "Mental age is a concept used to describe your psychological and intellectual maturity relative to average behavioral norms. Our assessment uses a series of lifestyle, logic, and reasoning questions to estimate whether your 'mind' is younger or older than your chronological age. It is a tool for self-discovery and understanding your mental development."
-  },
-  {
-    q: "Is my data private and secure?",
-    a: "Privacy is our highest priority. IQ Checker XYZ is built on a serverless architecture where all testing logic runs entirely within your web browser. We do not store your quiz answers or final results on our servers. Your data belongs to you, and you choose if and when to share it with the world."
-  },
-  {
-    q: "Do I need to pay to see my results?",
-    a: "No. Unlike many other platforms that hide results behind a paywall, our core cognitive tools are 100% free to use. We believe that access to cognitive benchmarking should be a universal right for anyone curious about their potential."
-  },
-  {
-    q: "How can I share my brilliance with others?",
-    a: "Upon completing any test, you will be presented with a beautifully designed result card. You can easily share this directly to X (Twitter), Instagram, or Facebook using our integrated share tools, or download a high-resolution image to keep for your records."
-  }
+export const HOME_FAQS = [
+  { q: "Are online IQ tests legit?", a: "Some are decent, some are just for fun. Online tests should not be taken as medical or clinical results." },
+  { q: "Are free IQ tests safe to use?", a: "Most are safe, but avoid sharing personal or payment information." },
+  { q: "Are IQ tests confidential?", a: "Professional tests are confidential. Online tests depend on the website’s policy." },
+  { q: "Are online IQ scores accepted officially?", a: "Usually no. Official uses require supervised testing." },
+  { q: "Is an IQ test a medical test?", a: "No, it’s a cognitive assessment, not a medical diagnosis." }
 ];
+
+export const IQ_TEST_FAQS = [
+  { q: "What is an IQ test?", a: "An IQ test is a way to measure how you solve problems, understand patterns, and think logically. It’s not about how much you studied in school. It’s more about how your brain works in general." },
+  { q: "How do I take an IQ test?", a: "You can take an IQ test online or in person. Online tests are easier and faster, while in-person tests are usually done by psychologists and take more time." },
+  { q: "Can I take an IQ test for free?", a: "Yes, there are free IQ tests online. Just be careful, some sites advertise “free” but ask for payment at the end. Always check first." },
+  { q: "How accurate are free IQ tests?", a: "Free tests can give you a rough idea, but they’re not always 100% accurate. Official tests are more reliable, but free ones are fine for curiosity." },
+  { q: "Where can I take an IQ test online?", a: "You can take an IQ test online on websites that specialize in brain tests or cognitive assessments. No appointment needed." },
+  { q: "What does an IQ test measure exactly?", a: "IQ tests usually measure logic, memory, pattern recognition, math reasoning, and verbal understanding." },
+  { q: "Is an IQ test timed?", a: "Most IQ tests are timed. The time pressure is part of how they measure problem-solving ability." },
+  { q: "What is a good IQ score?", a: "An average IQ score is around 100. Scores above 110 are considered above average, and 130+ is often labeled as gifted." },
+  { q: "Can my IQ change over time?", a: "Your IQ can slightly change, especially with age, education, and mental training, but it usually stays in a similar range." },
+  { q: "How long does an IQ test take?", a: "Most online IQ tests take about 20 to 40 minutes. Professional tests can take over an hour." },
+  { q: "Do employers in the USA use IQ tests?", a: "Some companies use aptitude or logic tests, but straight IQ tests are less common in hiring." },
+  { q: "Is an IQ test the same as an aptitude test?", a: "Not exactly. IQ tests measure overall intelligence, while aptitude tests focus on specific skills." },
+  { q: "Do I need to prepare for an IQ test?", a: "You don’t really study for IQ tests, but being well-rested and focused helps a lot." },
+  { q: "Are Mensa IQ tests different?", a: "Mensa uses professionally supervised tests and has higher accuracy standards." },
+  { q: "Is an online IQ test enough for Mensa?", a: "No, Mensa usually requires supervised, official test scores." }
+];
+
+export const FOOTER_FAQS = [
+  { q: "Can I take an IQ test on my phone?", a: "Yes, many online IQ tests work on mobile phones, but a larger screen is usually better." },
+  { q: "Can I take an IQ test just for fun?", a: "Absolutely. Many people do it out of curiosity." },
+  { q: "Should I trust one IQ score?", a: "One score is just one snapshot, not your full intelligence." },
+  { q: "Can online IQ tests be wrong?", a: "Yes, especially if taken casually or distracted." },
+  { q: "Why are people curious about IQ tests?", a: "Because everyone wants to understand how their mind works." }
+];
+
+export const REACTION_FAQS = [
+  { q: "Can stress affect IQ test results?", a: "Yes, stress, anxiety, or lack of sleep can lower your performance during the test." },
+  { q: "Can practicing puzzles increase IQ?", a: "Practicing puzzles can improve problem-solving skills, but it may not drastically change IQ." },
+  { q: "Can caffeine affect IQ test performance?", a: "A small amount might help focus, too much can increase anxiety." },
+  { q: "Do IQ tests include memory questions?", a: "Yes, memory is a common part of many IQ tests." },
+  { q: "Can learning new skills improve IQ?", a: "Learning keeps the brain active and may help cognitive performance over time." },
+  { q: "Can anxiety lower my IQ score?", a: "Yes, anxiety can reduce focus and slow thinking during the test." },
+  { q: "Can sleep improve IQ test results?", a: "Good sleep helps focus and speed, which can improve performance." },
+  { q: "Is IQ linked to mental health?", a: "Not directly, but mental health can affect test performance." },
+  { q: "Can music training affect IQ?", a: "Some studies suggest small benefits, especially in children." },
+  { q: "Are IQ tests stressful?", a: "They can be if you take them too seriously." },
+  { q: "Can I improve my IQ score naturally?", a: "Healthy habits, learning, and mental exercise can help performance." }
+];
+
+export const MENTAL_AGE_FAQS = [
+  { q: "What age can someone take an IQ test?", a: "IQ tests are available for children, teens, and adults, with age-appropriate questions." },
+  { q: "Are IQ tests used in schools?", a: "Schools sometimes use IQ or cognitive tests to identify learning needs or gifted programs." },
+  { q: "Is IQ genetic?", a: "Genetics play a role, but environment and education also matter a lot." },
+  { q: "Can IQ tests diagnose intelligence disorders?", a: "No, diagnosis should always be done by licensed professionals." },
+  { q: "Can kids take online IQ tests?", a: "Yes, but results should be taken lightly and not used for labeling." },
+  { q: "Is IQ more important than EQ?", a: "Both matter. IQ helps with logic, EQ helps with people and emotions." },
+  { q: "What happens if I score low on an IQ test?", a: "A low score doesn’t define you. It just reflects performance on one type of test." },
+  { q: "Can seniors take IQ tests?", a: "Yes, and many do, especially for cognitive health tracking." },
+  { q: "Is a high IQ always good?", a: "High IQ helps in some areas, but it doesn’t guarantee happiness or success." },
+  { q: "Are IQ scores permanent?", a: "They can change slightly, but usually stay within a range." },
+  { q: "Can kids with learning disabilities take IQ tests?", a: "Yes, but tests should be interpreted by professionals." },
+  { q: "Do IQ tests measure emotional skills?", a: "No, that’s measured by EQ tests." }
+];
+
+export const BRAIN_GAMES_FAQS = [
+  { q: "Where can I take an IQ test in person?", a: "In-person IQ tests are usually done at psychology clinics, schools, or testing centers with a licensed professional." },
+  { q: "Is IQ linked to success in life?", a: "IQ helps with problem-solving, but success also depends on effort, habits, and emotional intelligence." },
+  { q: "Are IQ tests biased?", a: "Some tests can have cultural or language bias, especially older versions." },
+  { q: "Where can I take an IQ test near me?", a: "You can search local psychology clinics, schools, or testing centers in your area." },
+  { q: "Can I retake an IQ test?", a: "Yes, but taking the same test too often can affect the accuracy." },
+  { q: "Do IQ tests include math?", a: "Some questions include basic math logic, but it’s more about reasoning than calculations." },
+  { q: "What IQ score is considered high?", a: "Scores above 120 are generally considered high, depending on the test." },
+  { q: "Is an IQ test the same worldwide?", a: "The concept is similar, but tests can differ by country and language." },
+  { q: "Are IQ tests used in the military?", a: "Some military assessments include cognitive ability tests, similar to IQ." },
+  { q: "Can language barriers affect IQ scores?", a: "Yes, especially on verbal-based questions." },
+  { q: "Are all IQ tests multiple-choice?", a: "Most are, but some professional tests include verbal or interactive tasks." },
+  { q: "Is there a perfect IQ test?", a: "No test is perfect. Each one measures intelligence in slightly different ways." },
+  { q: "Do IQ tests measure creativity?", a: "Not really. Creativity is different from traditional IQ." },
+  { q: "How often should I take an IQ test?", a: "Once in a long while is enough. Too often makes results less meaningful." },
+  { q: "Do IQ tests test common sense?", a: "Not really. They focus more on abstract reasoning." },
+  { q: "Can IQ predict academic success?", a: "It can help predict learning ability, but effort matters more." },
+  { q: "Are there different types of IQ tests?", a: "Yes, verbal, non-verbal, performance-based, and mixed types." },
+  { q: "Is cheating possible on IQ tests?", a: "Online tests can be cheated, which is why results shouldn’t be taken too seriously." },
+  { q: "Can brain games replace IQ tests?", a: "No, brain games are training tools, not measurement tools." },
+  { q: "Are there visual-only IQ tests?", a: "Yes, some tests avoid language and use shapes and patterns only." },
+  { q: "Is IQ important for college admissions?", a: "Most colleges don’t use IQ tests directly." }
+];
+
+export const FAQS = [...HOME_FAQS, ...IQ_TEST_FAQS, ...FOOTER_FAQS, ...REACTION_FAQS, ...MENTAL_AGE_FAQS, ...BRAIN_GAMES_FAQS];
 
 export const FAQ_SCHEMA = {
   "@context": "https://schema.org",

@@ -96,21 +96,21 @@ const BlogPost: React.FC = () => {
               </div>
 
               {/* AUTHOR / TRUST BOX */}
-              <div className="flex items-center gap-4 p-6 bg-slate-950/60 light:bg-slate-50 rounded-3xl mb-14 border border-slate-900 light:border-slate-100">
-                <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white">
-                  <User className="w-6 h-6" />
+              <div className="flex flex-col md:flex-row items-start md:items-center gap-6 p-8 bg-slate-950/60 light:bg-slate-50 rounded-[2rem] mb-14 border border-slate-900 light:border-slate-100">
+                <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center text-white shrink-0">
+                  <User className="w-8 h-8" />
                 </div>
                 <div>
-                  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
-                    Written By
+                  <p className="text-[10px] font-black text-blue-500 uppercase tracking-[0.2em] mb-1">
+                    Verified Author
                   </p>
-                  <p className="font-bold text-slate-50 light:text-slate-900">
-                    Editorial Research Team – IQ Checker XYZ
+                  <p className="text-xl font-black text-slate-50 light:text-slate-900 mb-2">
+                    {article.authorName}
+                  </p>
+                  <p className="text-sm text-slate-400 light:text-slate-600 leading-relaxed max-w-2xl">
+                    {article.authorBio}
                   </p>
                 </div>
-                <span className="ml-auto px-4 py-1 bg-blue-600/20 text-blue-500 text-[10px] font-black rounded-full uppercase">
-                  Cognitive Research
-                </span>
               </div>
 
               {/* CONTENT + SIDEBAR */}

@@ -14,7 +14,7 @@ import {
   BarChart3,
 } from 'lucide-react';
 import { SEO } from '../lib/seo';
-import { FAQS } from '../constants';
+import { HOME_FAQS } from '../constants';
 
 const Home: React.FC = () => {
   return (
@@ -117,7 +117,7 @@ const Home: React.FC = () => {
             Common Questions
           </h2>
           <div className="space-y-4">
-            {FAQS.slice(0, 5).map((faq, i) => (
+            {HOME_FAQS.map((faq, i) => (
               <AccordionItem key={i} question={faq.q} answer={faq.a} />
             ))}
           </div>

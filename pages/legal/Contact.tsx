@@ -14,7 +14,7 @@ const Contact: React.FC = () => (
     <section className="py-16 bg-slate-900/40 light:bg-slate-50/70 backdrop-blur-sm border-b border-slate-900 light:border-slate-200">
       <div className="container mx-auto px-4 max-w-5xl">
         <h1 className="text-4xl font-black mb-6 text-slate-50 light:text-slate-900">Contact Us</h1>
-        <p className="text-slate-300 light:text-slate-600 mb-12">Have questions about your results or our methodology? We're here to help.</p>
+        <p className="text-slate-300 light:text-slate-700 mb-12">Have questions about your results or our methodology? We're here to help.</p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
           <ContactCard icon={<Mail />} title="Email" detail="technosharmaji44@gmail.com" />
@@ -43,6 +43,23 @@ const Contact: React.FC = () => (
         </div>
       </div>
     </section>
+
+    {/* ContactPage Schema */}
+    <script type="application/ld+json">
+      {JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "ContactPage",
+        "mainEntity": {
+          "@type": "Organization",
+          "name": "IQ Checker XYZ",
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "email": "technosharmaji44@gmail.com",
+            "contactType": "Customer Support"
+          }
+        }
+      })}
+    </script>
   </div>
 );
 
@@ -51,8 +68,8 @@ const ContactCard = ({ icon, title, detail }: { icon: React.ReactNode, title: st
     <div className="w-12 h-12 bg-blue-900/30 light:bg-blue-100 text-blue-400 light:text-blue-600 rounded-xl flex items-center justify-center mx-auto mb-6">
       {React.cloneElement(icon as React.ReactElement<any>, { className: 'w-6 h-6' })}
     </div>
-    <h4 className="font-bold mb-2 text-slate-50 light:text-slate-900">{title}</h4>
-    <p className="text-sm text-slate-300 light:text-slate-600">{detail}</p>
+    <h4 className="font-bold mb-2 text-slate-50 light:text-slate-800">{title}</h4>
+    <p className="text-sm text-slate-300 light:text-slate-700">{detail}</p>
   </div>
 );
 

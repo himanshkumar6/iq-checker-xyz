@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import {
   Zap,
   Clock,
@@ -13,6 +14,7 @@ import { useStore } from '../store/useStore';
 import { downloadResultImage } from '../lib/share';
 import { SEO } from '../lib/seo';
 import { ShareModal } from '../components/ShareModal';
+import { REACTION_FAQS } from '../constants';
 import {
   PersonalBestCelebration,
   triggerPBCelebration
@@ -188,6 +190,24 @@ const ReactionTest: React.FC = () => {
                         Share
                       </button>
                     </div>
+
+                    {/* DISCLAIMER & LINKS */}
+                    <div className="mt-8 pt-8 border-t border-white/10 text-left">
+                      <p className="text-[10px] font-black uppercase tracking-widest text-white/50 mb-4">
+                        Educational Context
+                      </p>
+                      <div className="grid grid-cols-2 gap-3 mb-6">
+                        <Link to="/blog/average-iq-by-age" className="p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+                          <p className="text-[10px] font-bold text-white">Mind Evolution</p>
+                        </Link>
+                        <Link to="/blog/brain-training" className="p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+                          <p className="text-[10px] font-bold text-white">Brain Training</p>
+                        </Link>
+                      </div>
+                      <p className="text-[10px] text-white/40 italic leading-relaxed">
+                        Reaction time is a measure of neurological efficiency, not general intelligence. Results are influenced by hardware, fatigue, and environmental factors. Educational use only.
+                      </p>
+                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -239,7 +259,33 @@ const ReactionTest: React.FC = () => {
           )}
         </div>
       </section>
+
+      {/* FAQ SECTION — glass */}
+      <section className="py-16 px-4 bg-slate-900/30 light:bg-white/60 backdrop-blur-sm border-t border-slate-800/50 light:border-slate-200">
+        <div className="container mx-auto max-w-4xl">
+          <h2 className="text-4xl font-extrabold text-center mb-12 text-slate-50 light:text-slate-900">
+            Frequently Asked Questions
+          </h2>
+          <div className="space-y-4">
+            {REACTION_FAQS.map((faq, i) => (
+              <AccordionItem key={i} question={faq.q} answer={faq.a} />
+            ))}
+          </div>
+        </div>
+      </section>
     </>
+  );
+};
+
+const AccordionItem = ({ question, answer }: any) => {
+  const [open, setOpen] = React.useState(false);
+  return (
+    <div className="glass light:bg-white/80 backdrop-blur-md rounded-2xl border border-slate-800 light:border-slate-200">
+      <button onClick={() => setOpen(!open)} className="w-full px-6 py-5 text-left font-bold text-slate-50 light:text-slate-900">
+        {question}
+      </button>
+      {open && <div className="px-6 pb-6 text-slate-400 light:text-slate-600">{answer}</div>}
+    </div>
   );
 };
 

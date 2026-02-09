@@ -12,6 +12,7 @@ import {
   Clock,
   Trophy
 } from 'lucide-react';
+import { BRAIN_GAMES_FAQS } from '../constants';
 import { SEO } from '../lib/seo';
 
 const BrainGames: React.FC = () => {
@@ -199,8 +200,22 @@ const BrainGames: React.FC = () => {
             </Link>
           </div>
         </div>
-      </section >
-    </div >
+      </section>
+
+      {/* FAQ SECTION — glass */}
+      <section className="py-16 px-4 bg-slate-900/30 light:bg-white/60 backdrop-blur-sm border-t border-slate-800/50 light:border-slate-200">
+        <div className="container mx-auto max-w-4xl">
+          <h2 className="text-4xl font-extrabold text-center mb-12 text-slate-50 light:text-slate-900">
+            Frequently Asked Questions
+          </h2>
+          <div className="space-y-4">
+            {BRAIN_GAMES_FAQS.map((faq, i) => (
+              <AccordionItem key={i} question={faq.q} answer={faq.a} />
+            ))}
+          </div>
+        </div>
+      </section>
+    </div>
   );
 };
 
@@ -230,5 +245,17 @@ const GameCard: React.FC<any> = ({ to, icon, title, description, features }) => 
     </span>
   </Link>
 );
+
+const AccordionItem = ({ question, answer }: any) => {
+  const [open, setOpen] = React.useState(false);
+  return (
+    <div className="glass light:bg-white/80 backdrop-blur-md rounded-2xl border border-slate-800 light:border-slate-200">
+      <button onClick={() => setOpen(!open)} className="w-full px-6 py-5 text-left font-bold text-slate-50 light:text-slate-900">
+        {question}
+      </button>
+      {open && <div className="px-6 pb-6 text-slate-400 light:text-slate-600">{answer}</div>}
+    </div>
+  );
+};
 
 export default BrainGames;

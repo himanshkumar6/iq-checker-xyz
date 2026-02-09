@@ -13,7 +13,7 @@ const DMCA: React.FC = () => (
     <section className="py-16 bg-slate-900/20 light:bg-slate-50/10 backdrop-blur-sm border-b border-slate-900/50 light:border-slate-200">
       <div className="container mx-auto px-4 max-w-5xl">
         <h1 className="text-4xl font-black mb-12 text-slate-50 light:text-slate-900">DMCA Policy</h1>
-        <div className="prose prose-lg prose-invert light:prose-slate max-w-none prose-p:text-slate-300 light:prose-p:text-slate-600 prose-headings:text-slate-50 light:prose-headings:text-slate-900">
+        <div className="prose prose-lg prose-invert light:prose-slate max-w-none prose-p:text-slate-300 light:prose-p:text-slate-700 prose-headings:text-slate-50 light:prose-headings:text-slate-800">
           <p>
             IQ Checker XYZ respects the intellectual property rights of others. If you believe that any content on our site infringes upon your copyright, please send a notice to our designated agent at <a href="mailto:technosharmaji44@gmail.com">technosharmaji44@gmail.com</a>.
           </p>

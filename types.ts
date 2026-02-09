@@ -15,6 +15,8 @@ export interface BlogArticle {
   content: string;
   date: string;
   readTime: string;
+  authorName: string;
+  authorBio: string;
 }
 
 export interface IQResult {

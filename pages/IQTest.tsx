@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Brain,
@@ -8,7 +9,7 @@ import {
   XCircle
 } from 'lucide-react';
 import { SEO } from '../lib/seo';
-import { IQ_QUESTIONS } from '../constants';
+import { IQ_QUESTIONS, IQ_TEST_FAQS } from '../constants';
 import { useStore } from '../store/useStore';
 
 const IQTest: React.FC = () => {
@@ -311,15 +312,36 @@ const IQTest: React.FC = () => {
                 not a definitive measure of intelligence or cognitive ability.
               </p>
 
-              {/* DISCLAIMER */}
-              <div className="mt-8 p-6 rounded-2xl bg-blue-900/10 light:bg-blue-50 border border-blue-900/20 light:border-blue-100">
-                <h3 className="font-bold text-blue-400 light:text-blue-600 mb-2">
-                  Educational Disclaimer
+              {/* NEXT STEPS & RESEARCH */}
+              <div className="mt-10 py-8 border-t border-slate-800/50 light:border-slate-100 text-left">
+                <h3 className="text-xs font-black uppercase tracking-[0.2em] text-blue-500 mb-6">
+                  Recommended Research
                 </h3>
-                <p className="text-slate-300 light:text-slate-600">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <Link to="/blog/what-is-iq" className="p-4 rounded-2xl bg-slate-950/40 light:bg-slate-50 border border-slate-900 light:border-slate-200 hover:border-blue-500 transition-colors group">
+                    <p className="font-bold text-sm text-slate-50 light:text-slate-900 group-hover:text-blue-500 transition-colors">What Exactly is IQ?</p>
+                    <p className="text-[10px] text-slate-400 mt-1">Deep dive into intelligence quotients.</p>
+                  </Link>
+                  <Link to="/blog/increase-iq" className="p-4 rounded-2xl bg-slate-950/40 light:bg-slate-50 border border-slate-900 light:border-slate-200 hover:border-blue-500 transition-colors group">
+                    <p className="font-bold text-sm text-slate-50 light:text-slate-900 group-hover:text-blue-500 transition-colors">Improve Your Score</p>
+                    <p className="text-[10px] text-slate-400 mt-1">5 proven ways to sharpen your mind.</p>
+                  </Link>
+                </div>
+              </div>
+
+              {/* DISCLAIMER */}
+              <div className="mt-8 p-6 rounded-[2rem] bg-blue-900/10 light:bg-blue-50 border border-blue-900/20 light:border-blue-100 text-left">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+                  <h3 className="text-xs font-black uppercase tracking-widest text-blue-400 light:text-blue-600">
+                    Educational Policy Disclosure
+                  </h3>
+                </div>
+                <p className="text-xs text-slate-300 light:text-slate-600 leading-relaxed italic">
                   This assessment is provided for educational and self-reflection purposes only.
                   It does not diagnose cognitive conditions, measure clinical intelligence,
-                  or replace professional psychological evaluation.
+                  or replace professional psychological evaluation. For a medical or official
+                  diagnosis, please consult a licensed psychologist.
                 </p>
               </div>
             </section>
@@ -328,7 +350,49 @@ const IQTest: React.FC = () => {
           </AnimatePresence>
         </div>
       </section>
+
+      {/* FAQ SECTION — glass */}
+      <section className="py-16 px-4 bg-slate-900/30 light:bg-white/60 backdrop-blur-sm border-t border-slate-800/50 light:border-slate-200">
+        <div className="container mx-auto max-w-4xl">
+          <h2 className="text-4xl font-extrabold text-center mb-12 text-slate-50 light:text-slate-900">
+            Frequently Asked Questions
+          </h2>
+          <div className="space-y-4">
+            {IQ_TEST_FAQS.map((faq, i) => (
+              <AccordionItem key={i} question={faq.q} answer={faq.a} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ SCHEMA ONLY ON THIS PAGE */}
+      <script type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": IQ_TEST_FAQS.slice(0, 8).map(faq => ({
+            "@type": "Question",
+            "name": faq.q,
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": faq.a
+            }
+          }))
+        })}
+      </script>
     </>
+  );
+};
+
+const AccordionItem = ({ question, answer }: any) => {
+  const [open, setOpen] = React.useState(false);
+  return (
+    <div className="glass light:bg-white/80 backdrop-blur-md rounded-2xl border border-slate-800 light:border-slate-200">
+      <button onClick={() => setOpen(!open)} className="w-full px-6 py-5 text-left font-bold text-slate-50 light:text-slate-900">
+        {question}
+      </button>
+      {open && <div className="px-6 pb-6 text-slate-400 light:text-slate-600">{answer}</div>}
+    </div>
   );
 };
 

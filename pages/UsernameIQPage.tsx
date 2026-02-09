@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { UsernameIQChecker } from '../components/UsernameIQChecker';
 import { Sparkles, Info, ShieldCheck, Zap, HelpCircle } from 'lucide-react';
 import { SEO } from '../lib/seo';
@@ -49,13 +50,21 @@ const UsernameIQPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="bg-slate-900/40 light:bg-slate-50/70 backdrop-blur-sm p-8 rounded-2xl border border-slate-800 light:border-slate-100">
-              <h3 className="text-lg font-bold text-slate-50 light:text-slate-900 mb-4 flex items-center gap-2">
-                <Info className="w-5 h-5 text-blue-600" /> Entertainment Purpose Only
+            <div className="bg-yellow-500/10 light:bg-yellow-50 backdrop-blur-sm p-8 rounded-3xl border border-yellow-500/20">
+              <h3 className="text-lg font-black text-slate-50 light:text-slate-900 mb-4 flex items-center gap-2">
+                <Info className="w-5 h-5 text-yellow-500" /> Important Educational Notice
               </h3>
-              <p className="text-slate-300 light:text-slate-600 text-sm leading-relaxed">
-                The **Username IQ Checker** is a social heuristic tool designed for entertainment. It analyzes linguistic complexity in handles but does not measure actual cognitive ability. For a standardized assessment of fluid intelligence, please utilize our <a href="/iq-test" className="text-blue-600 font-bold hover:underline">Standard IQ Matrix Test</a>.
+              <p className="text-slate-300 light:text-slate-600 text-sm leading-relaxed mb-4">
+                The **Username IQ Checker** is a social heuristic tool and linguistic experiment designed for **entertainment only**.
               </p>
+              <p className="text-slate-400 light:text-slate-500 text-xs leading-relaxed italic border-l-2 border-yellow-500/50 pl-4">
+                It analyzes phonetic complexity and character entropy in handles but **does NOT** measure actual intelligence, cognitive ability, or academic potential. For a standardized assessment of fluid intelligence, please utilize our professional-grade logical matrix test below.
+              </p>
+              <div className="mt-6">
+                <Link to="/iq-test" className="inline-flex items-center gap-2 text-xs font-black text-blue-500 uppercase tracking-widest hover:underline">
+                  Go to Standard IQ Matrix Test →
+                </Link>
+              </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-6">
