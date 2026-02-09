@@ -56,35 +56,35 @@ export const SessionSummaryModal: React.FC<SessionSummaryModalProps> = ({
 
           {/* Modal */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="relative w-full max-w-md glass rounded-3xl p-8 max-h-[90vh] overflow-y-auto"
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+            className="bg-slate-900 light:bg-white/80 backdrop-blur-md border border-slate-800 light:border-slate-200 w-full max-w-2xl rounded-[3rem] shadow-2xl relative overflow-hidden"
           >
             {/* Close Button */}
             <button
               onClick={onClose}
-              className="absolute top-6 right-6 p-2 hover:bg-white/10 rounded-xl transition-colors"
+              className="absolute top-6 right-6 p-2 hover:bg-white/10 light:hover:bg-slate-100 rounded-xl transition-colors"
             >
-              <X className="w-5 h-5 text-slate-400" />
+              <X className="w-5 h-5 text-slate-400 light:text-slate-500" />
             </button>
 
             {/* Header */}
             <div className="text-center mb-8">
-              <div className="w-16 h-16 bg-purple-500/20 text-purple-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-purple-500/20 light:bg-purple-100 text-purple-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <Trophy className="w-8 h-8" />
               </div>
-              <h2 className="text-2xl font-black text-white mb-2">Session Complete!</h2>
-              <p className="text-sm text-slate-400">{gameName}</p>
+              <h2 className="text-2xl font-black text-slate-50 light:text-slate-900 mb-2">Session Complete!</h2>
+              <p className="text-slate-300 light:text-slate-600">{gameName}</p>
             </div>
 
             {/* Stats Grid */}
             <div className="space-y-4 mb-8">
               {/* Score */}
-              <div className="p-6 bg-slate-900 rounded-2xl border border-slate-800 text-center">
-                <p className="text-sm text-slate-500 font-bold uppercase tracking-widest mb-2">Score</p>
-                <p className="text-5xl font-black text-white mb-2">{score}</p>
-                <div className="inline-flex px-4 py-1 bg-purple-500/20 text-purple-400 rounded-full text-xs font-bold uppercase tracking-widest">
+              <div className="p-6 bg-slate-900 light:bg-slate-50/50 backdrop-blur-sm rounded-2xl border border-slate-800 light:border-slate-100 text-center">
+                <p className="text-sm text-slate-500 light:text-slate-500 font-bold uppercase tracking-widest mb-2">Score</p>
+                <p className="text-5xl font-black text-slate-50 light:text-slate-900 mb-2">{score}</p>
+                <div className="inline-flex px-4 py-1 bg-purple-500/20 light:bg-purple-100 text-purple-400 light:text-purple-600 rounded-full text-xs font-bold uppercase tracking-widest">
                   {categoryLabel}
                 </div>
               </div>
@@ -92,39 +92,39 @@ export const SessionSummaryModal: React.FC<SessionSummaryModalProps> = ({
               {/* Additional Stats */}
               <div className="grid grid-cols-2 gap-4">
                 {accuracy !== undefined && (
-                  <div className="p-4 bg-slate-900 rounded-xl border border-slate-800">
+                  <div className="p-4 bg-slate-900 light:bg-slate-50/50 backdrop-blur-sm rounded-xl border border-slate-800 light:border-slate-100">
                     <div className="flex items-center gap-2 mb-2">
                       <Target className="w-4 h-4 text-blue-400" />
-                      <p className="text-xs text-slate-500 font-bold uppercase">Accuracy</p>
+                      <p className="text-xs text-slate-500 light:text-slate-500 font-bold uppercase">Accuracy</p>
                     </div>
-                    <p className="text-2xl font-black text-white">{accuracy}%</p>
+                    <p className="text-2xl font-black text-slate-50 light:text-slate-900">{accuracy}%</p>
                   </div>
                 )}
 
-                <div className="p-4 bg-slate-900 rounded-xl border border-slate-800">
+                <div className="p-4 bg-slate-900 light:bg-slate-50/50 backdrop-blur-sm rounded-xl border border-slate-800 light:border-slate-100">
                   <div className="flex items-center gap-2 mb-2">
                     <Clock className="w-4 h-4 text-emerald-400" />
-                    <p className="text-xs text-slate-500 font-bold uppercase">Time</p>
+                    <p className="text-xs text-slate-500 light:text-slate-500 font-bold uppercase">Time</p>
                   </div>
-                  <p className="text-2xl font-black text-white">{formatTime(timePlayedSeconds)}</p>
+                  <p className="text-2xl font-black text-slate-50 light:text-slate-900">{formatTime(timePlayedSeconds)}</p>
                 </div>
 
                 {additionalStats.map((stat, idx) => (
-                  <div key={idx} className="p-4 bg-slate-900 rounded-xl border border-slate-800">
+                  <div key={idx} className="p-4 bg-slate-900 light:bg-slate-50/50 backdrop-blur-sm rounded-xl border border-slate-800 light:border-slate-100">
                     <div className="flex items-center gap-2 mb-2">
                       <TrendingUp className="w-4 h-4 text-amber-400" />
-                      <p className="text-xs text-slate-500 font-bold uppercase">{stat.label}</p>
+                      <p className="text-xs text-slate-500 light:text-slate-500 font-bold uppercase">{stat.label}</p>
                     </div>
-                    <p className="text-2xl font-black text-white">{stat.value}</p>
+                    <p className="text-2xl font-black text-slate-50 light:text-slate-900">{stat.value}</p>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Educational Disclaimer */}
-            <div className="mb-6 p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl">
-              <p className="text-xs text-slate-400 text-center leading-relaxed">
-                <span className="font-bold text-blue-400">Self-assessed • For fun and educational purposes only</span>
+            <div className="mb-6 p-4 bg-blue-500/10 light:bg-blue-50 border border-blue-500/20 light:border-blue-100 rounded-xl">
+              <p className="text-xs text-slate-50 light:text-slate-600 leading-relaxed">
+                <span className="font-bold text-blue-400 light:text-blue-600">Self-assessed • For fun and educational purposes only</span>
                 <br />
                 This is not a clinical or diagnostic assessment.
               </p>
@@ -134,14 +134,14 @@ export const SessionSummaryModal: React.FC<SessionSummaryModalProps> = ({
             <div className="flex gap-3">
               <button
                 onClick={handleShare}
-                className="flex-1 flex items-center justify-center gap-2 p-4 bg-purple-600 text-white rounded-xl font-bold text-sm hover:bg-purple-700 transition-all"
+                className="flex-1 flex items-center justify-center gap-2 p-4 bg-purple-600 text-slate-50 rounded-xl font-bold text-sm hover:bg-purple-700 transition-all shadow-lg shadow-purple-600/20"
               >
                 <Share2 className="w-4 h-4" />
                 Share Result
               </button>
               <button
                 onClick={onClose}
-                className="flex-1 p-4 bg-white/10 text-white rounded-xl font-bold text-sm hover:bg-white/20 transition-all"
+                className="flex-1 p-4 bg-slate-50/10 light:bg-slate-100 text-slate-50 light:text-slate-900 rounded-xl font-bold text-sm hover:bg-slate-50/20 light:hover:bg-slate-200 transition-all"
               >
                 Close
               </button>

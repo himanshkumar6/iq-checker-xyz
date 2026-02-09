@@ -1,8 +1,7 @@
-
 export interface Question {
   id: string;
   text: string;
-  category: 'LOGIC' | 'PATTERN' | 'MATH' | 'VISUAL';
+  category: "LOGIC" | "PATTERN" | "MATH" | "VISUAL";
   difficultyLevel: 1 | 2 | 3;
   options: string[];
   correctAnswer: number;
@@ -21,6 +20,8 @@ export interface BlogArticle {
 export interface IQResult {
   score: number;
   level: string;
+  correct: number;
+  wrong: number;
 }
 
 export interface ReactionAttempt {
@@ -28,14 +29,14 @@ export interface ReactionAttempt {
   time: number;
 }
 
-export type MentalAgeTrait = 
-  | 'emotional_regulation'
-  | 'impulsivity'
-  | 'risk_tolerance'
-  | 'long_term_thinking'
-  | 'responsibility'
-  | 'pressure_reaction'
-  | 'self_awareness';
+export type MentalAgeTrait =
+  | "emotional_regulation"
+  | "impulsivity"
+  | "risk_tolerance"
+  | "long_term_thinking"
+  | "responsibility"
+  | "pressure_reaction"
+  | "self_awareness";
 
 export interface MentalAgeQuestion {
   id: string;

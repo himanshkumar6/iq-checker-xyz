@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, HelpCircle } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { SEO } from '../../lib/seo';
 import { useBrainGameSession } from '../../lib/hooks/useBrainGameSession';
 import { SessionSummaryModal } from '../../components/SessionSummaryModal';
+import { QuitConfirmationModal } from '../../components/QuitConfirmationModal';
 import { SoundControl, playSound } from '../../components/SoundControl';
 import { PersonalBestCelebration, triggerPBCelebration } from '../../components/PersonalBestCelebration';
 import { isNewPersonalBest, savePersonalBest } from '../../lib/personalBest';
@@ -22,6 +23,10 @@ const PatternRecognition: React.FC = () => {
   const [feedback, setFeedback] = useState<'correct' | 'incorrect' | null>(null);
   const [difficulty, setDifficulty] = useState(1);
   const [showSummary, setShowSummary] = useState(false);
+  const [showQuitConfirm, setShowQuitConfirm] = useState(false);
+  const [totalResponseTime, setTotalResponseTime] = useState(0);
+  const [startTime, setStartTime] = useState(Date.now());
+  const navigate = useNavigate();
 
   const { session, updateSession } = useBrainGameSession({
     onSessionEnd: (finalSession) => {
@@ -94,6 +99,7 @@ const PatternRecognition: React.FC = () => {
   // Initialize first pattern
   useEffect(() => {
     setCurrentPattern(generatePattern(difficulty));
+    setStartTime(Date.now());
   }, []);
 
   const handleAnswer = (answer: number) => {
@@ -117,6 +123,10 @@ const PatternRecognition: React.FC = () => {
       score: newScore
     });
 
+    if (isCorrect) {
+      setTotalResponseTime(prev => prev + (Date.now() - startTime));
+    }
+
     // Increase difficulty every 3 correct answers
     if (isCorrect && newCorrectAnswers % 3 === 0) {
       setDifficulty(prev => prev + 1);
@@ -128,6 +138,7 @@ const PatternRecognition: React.FC = () => {
       setCurrentPattern(generatePattern(isCorrect && newCorrectAnswers % 3 === 0 ? difficulty + 1 : difficulty));
       setSelectedAnswer(null);
       setFeedback(null);
+      setStartTime(Date.now());
     }, 1500);
   };
 
@@ -140,7 +151,7 @@ const PatternRecognition: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen overflow-hidden">
+    <div className="min-h-screen overflow-hidden bg-transparent">
       <SEO
         title="Pattern Recognition Game – Test Your Logic Skills | IQ Checker XYZ"
         description="Challenge your pattern recognition skills with endless logical sequences. Free brain game for logic practice and mental exercise."
@@ -150,134 +161,135 @@ const PatternRecognition: React.FC = () => {
       <SoundControl />
 
       {/* Header */}
-      <div className="container mx-auto px-4 pt-24 pb-8">
-        <div className="flex items-center justify-between mb-6">
-          <Link to="/brain-games" className="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
-            <ArrowLeft className="w-4 h-4" />
-            Back to Brain Games
-          </Link>
-          <button
-            onClick={() => setShowSummary(true)}
-            className="px-4 py-2 bg-red-600/20 text-red-400 border border-red-600/30 rounded-xl font-bold text-sm hover:bg-red-600/30 transition-all"
-          >
-            Quit Game
-          </button>
-        </div>
+      <div className="pt-16 pb-8 bg-slate-900/20 light:bg-slate-50/10">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between mb-6">
+            <Link to="/brain-games" className="inline-flex items-center gap-2 text-slate-400 light:text-slate-500 hover:text-slate-50 light:hover:text-blue-600 transition-colors">
+              <ArrowLeft className="w-4 h-4" />
+              Back to Arena
+            </Link>
+            <button
+              onClick={() => setShowQuitConfirm(true)}
+              className="px-4 py-2 bg-red-600/20 text-red-400 border border-red-600/30 rounded-xl font-bold text-sm hover:bg-red-600/30 transition-all"
+            >
+              Quit Game
+            </button>
+          </div>
 
-        <div className="flex justify-between items-start mb-8">
-          <div>
-            <h1 className="text-3xl md:text-4xl font-extrabold text-white mb-2">Pattern Recognition</h1>
-            <p className="text-slate-400">Find the next number in the sequence</p>
+          <div className="flex justify-between items-start mb-8">
+            <div>
+              <h1 className="text-3xl md:text-4xl font-extrabold text-slate-50 light:text-slate-900 mb-2">Pattern Recognition</h1>
+              <p className="text-slate-300 light:text-slate-600">Identify the repeating sequence</p>
+            </div>
+            <div className="text-right">
+              <p className="text-sm text-slate-500 light:text-slate-400 uppercase tracking-widest mb-1">Score</p>
+              <p className="text-3xl font-black text-slate-50 light:text-slate-900">{session.score}</p>
+            </div>
           </div>
-          <div className="text-right">
-            <p className="text-sm text-slate-500 uppercase tracking-widest mb-1">Score</p>
-            <p className="text-3xl font-black text-white">{session.score}</p>
-          </div>
-        </div>
 
-        {/* Stats Bar */}
-        <div className="grid grid-cols-3 gap-4 mb-8">
-          <div className="p-4 glass rounded-xl text-center">
-            <p className="text-xs text-slate-500 uppercase mb-1">Accuracy</p>
-            <p className="text-xl font-bold text-white">{session.accuracy}%</p>
-          </div>
-          <div className="p-4 glass rounded-xl text-center">
-            <p className="text-xs text-slate-500 uppercase mb-1">Answered</p>
-            <p className="text-xl font-bold text-white">{session.questionsAnswered}</p>
-          </div>
-          <div className="p-4 glass rounded-xl text-center">
-            <p className="text-xs text-slate-500 uppercase mb-1">Difficulty</p>
-            <p className="text-xl font-bold text-white">Level {difficulty}</p>
+          {/* Stats Bar */}
+          <div className="grid grid-cols-4 gap-4 mb-8">
+            <div className="p-3 glass bg-slate-900 light:bg-white/70 backdrop-blur-md border border-slate-800 light:border-slate-200 rounded-xl text-center shadow-sm">
+              <p className="text-xs text-slate-500 light:text-slate-400 uppercase mb-1">Accuracy</p>
+              <p className="text-lg font-bold text-slate-50 light:text-slate-900">{session.accuracy}%</p>
+            </div>
+            <div className="p-3 glass bg-slate-900 light:bg-white/70 backdrop-blur-md border border-slate-800 light:border-slate-200 rounded-xl text-center shadow-sm">
+              <p className="text-xs text-slate-500 light:text-slate-400 uppercase mb-1">Solved</p>
+              <p className="text-lg font-bold text-slate-50 light:text-slate-900">{session.correctAnswers}</p>
+            </div>
+            <div className="p-3 glass bg-slate-900 light:bg-white/70 backdrop-blur-md border border-slate-800 light:border-slate-200 rounded-xl text-center shadow-sm">
+              <p className="text-xs text-slate-500 light:text-slate-400 uppercase mb-1">Avg Time</p>
+              <p className="text-lg font-bold text-slate-50 light:text-slate-900">{(totalResponseTime / (session.correctAnswers || 1) / 1000).toFixed(1)}s</p>
+            </div>
+            <div className="p-3 glass bg-slate-900 light:bg-white/70 backdrop-blur-md border border-slate-800 light:border-slate-200 rounded-xl text-center shadow-sm">
+              <p className="text-xs text-slate-500 light:text-slate-400 uppercase mb-1">Level</p>
+              <p className="text-lg font-bold text-slate-50 light:text-slate-900">{difficulty}</p>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Game Area */}
-      <div className="container mx-auto px-4 pb-16">
-        <div className="max-w-2xl mx-auto">
-          {currentPattern && (
-            <motion.div
-              key={currentPattern.sequence.join('-')}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mb-8"
-            >
-              {/* Sequence Display */}
-              <div className="p-8 glass rounded-3xl mb-6">
-                <div className="flex items-center gap-2 mb-6">
-                  <HelpCircle className="w-5 h-5 text-blue-400" />
-                  <p className="text-sm text-slate-400">What comes next?</p>
-                </div>
-
-                <div className="flex flex-wrap items-center justify-center gap-3 mb-4">
-                  {currentPattern.sequence.map((num, idx) => (
-                    <div key={idx} className="w-16 h-16 bg-slate-900 rounded-xl flex items-center justify-center border border-slate-800">
-                      <span className="text-2xl font-bold text-white">{num}</span>
+      <div className="px-4 pb-16 bg-transparent pt-16">
+        <div className="container mx-auto">
+          <div className="max-w-2xl mx-auto">
+            {currentPattern && (
+              <motion.div
+                key={currentPattern.sequence.join('-')}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mb-8"
+              >
+                {/* Sequence Display */}
+                <div className="p-8 glass bg-slate-900 light:bg-white/70 backdrop-blur-md rounded-3xl mb-8 border border-slate-800 light:border-slate-200 shadow-sm">
+                  <p className="text-slate-400 light:text-slate-500 text-sm font-bold uppercase tracking-widest text-center mb-10">Complete the sequence</p>
+                  <div className="flex justify-center flex-wrap gap-4 mb-12">
+                    {currentPattern.sequence.map((num, i) => (
+                      <div key={i} className="w-16 h-16 md:w-20 md:h-20 bg-slate-950 light:bg-slate-50 rounded-2xl flex items-center justify-center text-3xl font-black text-slate-50 light:text-slate-900 border border-slate-800 light:border-slate-200 shadow-sm">
+                        {num}
+                      </div>
+                    ))}
+                    <div className="w-16 h-16 md:w-20 md:h-20 bg-blue-600/10 light:bg-blue-50 border-2 border-dashed border-blue-600/30 light:border-blue-400/50 rounded-2xl flex items-center justify-center text-3xl font-black text-blue-600 animate-pulse">
+                      ?
                     </div>
-                  ))}
-                  <div className="w-16 h-16 bg-blue-600/20 border-2 border-blue-600 border-dashed rounded-xl flex items-center justify-center">
-                    <span className="text-2xl font-bold text-blue-400">?</span>
                   </div>
                 </div>
-              </div>
 
-              {/* Options */}
-              <div className="grid grid-cols-2 gap-4">
-                {currentPattern.options.map((option, idx) => {
-                  const isSelected = selectedAnswer === option;
-                  const isCorrect = option === currentPattern.correctAnswer;
-                  const showResult = selectedAnswer !== null;
-
-                  let bgClass = 'bg-slate-900 hover:bg-slate-800';
-                  if (showResult && isSelected && isCorrect) bgClass = 'bg-green-600';
-                  if (showResult && isSelected && !isCorrect) bgClass = 'bg-red-600';
-                  if (showResult && !isSelected && isCorrect) bgClass = 'bg-green-600/50';
-
-                  return (
+                {/* Options */}
+                <div className="grid grid-cols-2 gap-4">
+                  {currentPattern.options.map((option) => (
                     <button
-                      key={idx}
+                      key={option}
                       onClick={() => handleAnswer(option)}
-                      disabled={selectedAnswer !== null}
-                      className={`p-6 ${bgClass} rounded-2xl border border-slate-800 transition-all disabled:cursor-not-allowed hover:scale-105 active:scale-95`}
+                      disabled={feedback !== null}
+                      className="p-6 bg-slate-950 light:bg-white rounded-2xl text-2xl font-black text-slate-300 light:text-slate-900 hover:bg-slate-900 light:hover:bg-slate-50 border-2 border-slate-800 light:border-slate-200 transition-all hover:scale-105 active:scale-95 disabled:opacity-50 shadow-sm"
                     >
-                      <span className="text-3xl font-bold text-white">{option}</span>
+                      {option}
                     </button>
-                  );
-                })}
-              </div>
+                  ))}
+                </div>
 
-              {/* Feedback */}
-              {feedback && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className={`mt-6 p-4 rounded-xl text-center font-bold ${feedback === 'correct' ? 'bg-green-600/20 text-green-400' : 'bg-red-600/20 text-red-400'
-                    }`}
-                >
-                  {feedback === 'correct' ? '✓ Correct!' : '✗ Incorrect'}
-                </motion.div>
-              )}
-            </motion.div>
-          )}
+                {/* Feedback */}
+                {feedback && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className={`mt-6 p-4 rounded-xl text-center font-bold ${feedback === 'correct' ? 'bg-green-600/20 text-green-400' : 'bg-red-600/20 text-red-400'
+                      }`}
+                  >
+                    {feedback === 'correct' ? '✓ Correct!' : '✗ Incorrect'}
+                  </motion.div>
+                )}
+              </motion.div>
+            )}
+          </div>
         </div>
+
+        {/* Session Summary Modal */}
+        <SessionSummaryModal
+          isOpen={showSummary}
+          onClose={() => setShowSummary(false)}
+          gameName="Pattern Recognition"
+          score={session.score}
+          accuracy={session.accuracy}
+          timePlayedSeconds={session.timePlayedSeconds}
+          categoryLabel={getCategoryLabel(session.score)}
+          additionalStats={[
+            { label: 'Patterns', value: session.questionsAnswered || 0 }
+          ]}
+        />
+
+        {/* Personal Best Celebration Overlay */}
+        <PersonalBestCelebration gameName="pattern_recognition" />
+
+        {/* Quit Confirmation Modal */}
+        <QuitConfirmationModal
+          isOpen={showQuitConfirm}
+          onClose={() => setShowQuitConfirm(false)}
+          onConfirm={() => navigate('/brain-games')}
+          gameName="Pattern Recognition"
+        />
       </div>
-
-      {/* Session Summary Modal */}
-      <SessionSummaryModal
-        isOpen={showSummary}
-        onClose={() => setShowSummary(false)}
-        gameName="Pattern Recognition"
-        score={session.score}
-        accuracy={session.accuracy}
-        timePlayedSeconds={session.timePlayedSeconds}
-        categoryLabel={getCategoryLabel(session.score)}
-        additionalStats={[
-          { label: 'Patterns', value: session.questionsAnswered || 0 }
-        ]}
-      />
-
-      {/* Personal Best Celebration Overlay */}
-      <PersonalBestCelebration gameName="pattern_recognition" />
     </div>
   );
 };

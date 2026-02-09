@@ -21,8 +21,10 @@ import Contact from './pages/legal/Contact';
 import DMCA from './pages/legal/DMCA';
 import UpsideDownParticles from './components/background/UpsideDownParticles';
 import WhiteFlakesBackground from './components/background/WhiteFlakesBackground';
+import CursorTrail from './components/cursor/CursorTrail';
 import { loadGA, trackPageView } from "./lib/analytics";
 import CursorGlow from './components/cursor/CursorGlow';
+
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -46,14 +48,15 @@ const App: React.FC = () => {
   }, [location.pathname]);
 
   return (
-    <div className="min-h-dvh bg-slate-950 relative overflow-x-hidden">
+    <div className="min-h-dvh relative overflow-x-hidden bg-transparent">
       <ScrollToTop />
 
       {/* Background Layers */}
       <div className="fixed inset-0 pointer-events-none z-0">
         <WhiteFlakesBackground />
         <UpsideDownParticles />
-        <CursorGlow />
+        {/* <CursorGlow /> */}
+        <CursorTrail />
       </div>
 
       {/* Content Layers */}
@@ -84,6 +87,9 @@ const App: React.FC = () => {
 
         <Footer />
       </div>
+
+      {/* High-level overlay layers */}
+      <CursorTrail />
     </div>
   );
 };

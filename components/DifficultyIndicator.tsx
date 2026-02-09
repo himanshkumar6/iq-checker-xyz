@@ -21,16 +21,16 @@ const DifficultyIndicator: React.FC<DifficultyIndicatorProps> = ({ level }) => {
         <div
           key={dot}
           className={`w-2 h-2 rounded-full transition-colors duration-300 ${dot <= safeLevel
-              ? 'bg-blue-600/60 dark:bg-blue-500/50'
-              : 'bg-slate-200 dark:bg-slate-800'
+            ? 'bg-blue-500/50'
+            : 'bg-slate-800'
             }`}
         />
       ))}
 
       {/* Desktop Only Tooltip */}
-      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 px-3 py-1.5 bg-slate-900 dark:bg-slate-800 text-white text-[10px] font-bold rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap shadow-xl border border-slate-700 dark:border-slate-700 hidden md:block">
-        This question uses {complexityText} logical complexity.
-        <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-900 dark:border-t-slate-800" />
+      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 px-3 py-1.5 bg-slate-800 text-slate-50 text-[10px] font-bold rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap shadow-xl border border-slate-700 hidden md:block">
+        This question uses <span className="text-blue-400">{complexityText}</span> logical complexity.
+        <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800" />
       </div>
     </div>
   );

@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef } from 'react';
 
 interface Flake {
@@ -24,126 +23,98 @@ const WhiteFlakesBackground: React.FC = () => {
     if (!ctx) return;
 
     let flakes: Flake[] = [];
-    let animationFrameId: number;
-    let isPaused = false;
+    let rafId: number;
+    let paused = false;
 
-    // Responsive particle count
-    const getParticleCount = () => {
-      if (typeof window === 'undefined') return 100;
-      return window.innerWidth < 768 ? 40 : 120;
-    };
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
+    const getCount = () => (window.innerWidth < 768 ? 45 : 140);
 
     const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      canvas.style.width = `${window.innerWidth}px`;
+      canvas.style.height = `${window.innerHeight}px`;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
 
     const createFlake = (): Flake => {
-      // Layering: 1 = far (small/slow), 2 = mid, 3 = near (large/fast)
       const layer = Math.random() * 3;
       return {
         x: Math.random() * window.innerWidth,
         y: Math.random() * window.innerHeight,
-        radius: (layer * 0.7) + 0.4, // 0.4px to 2.5px
-        vx: (Math.random() - 0.5) * 0.2,
-        vy: (Math.random() * 0.2) + 0.1 + (layer * 0.1),
-        opacity: Math.random() * 0.4 + 0.1,
+        radius: 0.4 + layer * 0.7,
+        vx: (Math.random() - 0.5) * 0.15,
+        vy: 0.1 + layer * 0.12,
+        opacity: Math.random() * 0.35 + 0.15,
         sway: Math.random() * Math.PI * 2,
-        swaySpeed: 0.005 + Math.random() * 0.01,
-        parallax: 0.4 + (layer * 0.6),
+        swaySpeed: 0.004 + Math.random() * 0.008,
+        parallax: 0.5 + layer * 0.6,
       };
     };
 
     const init = () => {
       resize();
-      flakes = Array.from({ length: getParticleCount() }, createFlake);
+      flakes = Array.from({ length: getCount() }, createFlake);
     };
 
     const draw = () => {
-      if (isPaused || !ctx || !canvas) return;
-      
+      if (paused) return;
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const dark = document.documentElement.classList.contains('dark');
 
-      const isDarkMode = document.documentElement.classList.contains('dark');
-      
-      // Select base colors based on theme - bright white for dark, soft slate for light
-      const r = isDarkMode ? 255 : 100;
-      const g = isDarkMode ? 255 : 116;
-      const b = isDarkMode ? 255 : 139;
+      const r = dark ? 255 : 130;
+      const g = dark ? 255 : 140;
+      const b = dark ? 255 : 150;
 
-      flakes.forEach((f) => {
-        // Vertical movement with parallax
+      flakes.forEach(f => {
         f.y += f.vy * f.parallax;
-        
-        // Horizontal drift + sine wave sway
-        f.x += (f.vx + Math.sin(f.sway) * 0.3) * f.parallax;
+        f.x += (f.vx + Math.sin(f.sway) * 0.25) * f.parallax;
         f.sway += f.swaySpeed;
 
-        // Reset if out of bounds (looping)
-        if (f.y > canvas.height) {
+        if (f.y > window.innerHeight) {
           f.y = -10;
-          f.x = Math.random() * canvas.width;
+          f.x = Math.random() * window.innerWidth;
         }
-        if (f.x > canvas.width) f.x = 0;
-        if (f.x < 0) f.x = canvas.width;
+        if (f.x > window.innerWidth) f.x = 0;
+        if (f.x < 0) f.x = window.innerWidth;
 
         ctx.beginPath();
         ctx.arc(f.x, f.y, f.radius, 0, Math.PI * 2);
-        
-        // Only add blur/shadow to "near" flakes to save performance
-        if (f.radius > 1.8 && isDarkMode) {
-          ctx.shadowBlur = 3;
-          ctx.shadowColor = `rgba(${r}, ${g}, ${b}, ${f.opacity * 0.3})`;
-        } else {
-          ctx.shadowBlur = 0;
-        }
-
-        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${f.opacity})`;
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = `rgba(${r},${g},${b},${f.opacity})`;
         ctx.fill();
       });
 
-      animationFrameId = requestAnimationFrame(draw);
+      rafId = requestAnimationFrame(draw);
     };
 
-    const handleVisibilityChange = () => {
-      isPaused = document.hidden;
-      if (!isPaused) draw();
+    const onVisibility = () => {
+      paused = document.hidden;
+      if (!paused) draw();
     };
 
-    const handleResize = () => {
-      resize();
-      // Re-initialize a subset of flakes if screen grows significantly
-      const targetCount = getParticleCount();
-      if (flakes.length < targetCount) {
-        const diff = targetCount - flakes.length;
-        for (let i = 0; i < diff; i++) flakes.push(createFlake());
-      } else if (flakes.length > targetCount) {
-        flakes = flakes.slice(0, targetCount);
-      }
-    };
+    window.addEventListener('resize', init);
+    document.addEventListener('visibilitychange', onVisibility);
 
-    // Accessibility check: disable if user prefers reduced motion
-    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    if (motionQuery.matches) return;
-
-    window.addEventListener('resize', handleResize);
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    
     init();
     draw();
 
     return () => {
-      window.removeEventListener('resize', handleResize);
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-      cancelAnimationFrame(animationFrameId);
+      window.removeEventListener('resize', init);
+      document.removeEventListener('visibilitychange', onVisibility);
+      cancelAnimationFrame(rafId);
     };
   }, []);
 
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 pointer-events-none z-[-10] transition-opacity duration-1000 bg-transparent"
-      aria-hidden="true"
+      className="fixed inset-0 pointer-events-none z-0 bg-transparent"
+      aria-hidden
     />
   );
 };

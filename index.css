@@ -1,5 +1,54 @@
 @import "tailwindcss";
 
+@variant light (&:where(.light, .light *));
+
+/* -------------------- */
+/* CSS VARIABLES - DARK MODE ONLY (PREMIUM GROUNDED) */
+/* -------------------- */
+:root {
+  /* Site Base - slate-950 foundation */
+  --bg-primary: 2 6 23;           /* slate-950 - deep ink */
+  --bg-secondary: 15 23 42;       /* slate-900 - section surface */
+  --bg-tertiary: 30 41 59;        /* slate-800 - card surface */
+  
+  /* Typography - optimized contrast */
+  --text-primary: 248 250 252;    /* slate-50 - crisp headings */
+  --text-secondary: 203 213 225;  /* slate-300 - readable body */
+  --text-muted: 148 163 184;      /* slate-400 - captions / metadata */
+  
+  /* Borders */
+  --border-primary: 30 41 59;     /* slate-800 */
+  --border-secondary: 51 65 85;   /* slate-700 */
+  
+  /* Glass morphism - grounded */
+  --glass-bg: 15 23 42;           /* slate-900 */
+  --glass-opacity: 0.6;
+  --glass-border: 255 255 255;    /* white */
+  --glass-border-opacity: 0.1;
+}
+
+.light {
+  /* Site Base - clean paper */
+  --bg-primary: 255 255 255;      /* pure white */
+  --bg-secondary: 248 250 252;    /* slate-50 - section surface */
+  --bg-tertiary: 241 245 249;     /* slate-100 - card surface */
+
+  /* Typography - deep contrast */
+  --text-primary: 15 23 42;       /* slate-900 - ink */
+  --text-secondary: 51 65 85;     /* slate-700 - charcoal body */
+  --text-muted: 100 116 139;      /* slate-500 - neutral */
+
+  /* Borders */
+  --border-primary: 226 232 240;  /* slate-200 */
+  --border-secondary: 203 213 225;/* slate-300 */
+
+  /* Glass morphism - airy */
+  --glass-bg: 255 255 255;        /* white */
+  --glass-opacity: 0.7;
+  --glass-border: 15 23 42;       /* ink */
+  --glass-border-opacity: 0.05;
+}
+
 /* -------------------- */
 /* BASE TYPOGRAPHY */
 /* -------------------- */
@@ -12,17 +61,16 @@ body,
 #root {
   margin: 0;
   padding: 0;
-  background-color: #020617; /* slate-950 */
+  background-color: rgb(var(--bg-primary));
+  color: rgb(var(--text-secondary));
   overflow-x: hidden;
+  overscroll-behavior-x: none;
+  overscroll-behavior-y: auto;
 }
 
-/* Scoped Resets */
-nav,
-header,
-footer {
-  border: none !important;
-}
-
+/* -------------------- */
+/* CURSOR EFFECTS */
+/* -------------------- */
 .red-cursor-dot {
   width: 6px;
   height: 6px;
@@ -35,24 +83,31 @@ footer {
 
 .red-cursor-particle {
   border-radius: 9999px;
-  background-color: rgba(239, 68, 68, 0.35); /* red-500 @ 0.35 opacity */
+  background-color: rgba(239, 68, 68, 0.35);
   position: fixed;
   pointer-events: none;
   z-index: 39;
   filter: blur(0.5px);
-  box-shadow: 0 0 6px rgba(239, 68, 68, 0.25); /* Ambient ember glow */
+  box-shadow: 0 0 6px rgba(239, 68, 68, 0.25);
 }
 
+/* -------------------- */
+/* TYPOGRAPHY OVERRIDES */
+/* -------------------- */
 body {
   @apply antialiased;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  -moz-osx-smoothing: grayscale;
 }
 
+/* -------------------- */
+/* THEME-FIXED COMPONENTS */
+/* -------------------- */
 .glass {
-  background: rgba(15, 23, 42, 0.6);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(var(--glass-bg) / var(--glass-opacity));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(var(--glass-border) / var(--glass-border-opacity));
 }
 
 /* -------------------- */
@@ -66,7 +121,7 @@ body {
 }
 
 /* -------------------- */
-/* SCROLLBAR FIX */
+/* SCROLLBAR - DARK ONLY */
 /* -------------------- */
 ::-webkit-scrollbar {
   width: 8px;
@@ -77,8 +132,12 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: rgba(30, 41, 59, 1); /* slate-800 */
   border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(51, 65, 85, 1); /* slate-700 */
 }
 
 /* -------------------- */
@@ -87,4 +146,16 @@ body {
 ::selection {
   background: #3b82f6;
   color: white;
+}
+
+/* -------------------- */
+/* UTILITIES */
+/* -------------------- */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
 }

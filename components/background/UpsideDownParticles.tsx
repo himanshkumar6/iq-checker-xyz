@@ -8,7 +8,6 @@ interface Particle {
   size: number;
   opacity: number;
   maxOpacity: number;
-  life: number;
 }
 
 const UpsideDownParticles: React.FC = () => {
@@ -21,98 +20,87 @@ const UpsideDownParticles: React.FC = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    let animationFrameId: number;
     let particles: Particle[] = [];
-    const isMobile = window.innerWidth < 768;
-    const particleCount = isMobile ? 30 : 80;
+    let rafId: number;
 
-    // Check for reduced motion preference
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
+    const isMobile = window.innerWidth < 768;
+    const count = isMobile ? 55 : 110;
 
     const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      canvas.style.width = `${window.innerWidth}px`;
+      canvas.style.height = `${window.innerHeight}px`;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
 
-    const createParticle = (): Particle => {
-      return {
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: (Math.random() - 0.2) * -0.6, // Mostly floating upwards
-        size: Math.random() * 2 + 0.5,
-        opacity: 0,
-        maxOpacity: Math.random() * 0.4 + 0.1,
-        life: Math.random() * 0.02 + 0.005,
-      };
-    };
+    const createParticle = (): Particle => ({
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      vx: (Math.random() - 0.5) * 0.35,
+      vy: -(Math.random() * 0.4 + 0.15),
+      size: Math.random() * 1.6 + 0.6,
+      opacity: 0,
+      maxOpacity: Math.random() * 0.35 + 0.15,
+    });
 
     const init = () => {
       resize();
-      particles = Array.from({ length: particleCount }, createParticle);
+      particles = Array.from({ length: count }, createParticle);
     };
 
     const draw = () => {
-      if (!ctx || !canvas) return;
-
-      const isDarkMode = document.documentElement.classList.contains('dark');
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Only draw UpsideDown particles in dark mode to avoid visual clutter in light mode
-      if (!isDarkMode) {
-        animationFrameId = requestAnimationFrame(draw);
-        return;
-      }
+      const dark = document.documentElement.classList.contains('dark');
+      const opacityMul = dark ? 1 : 0.35;
 
-      particles.forEach((p, i) => {
-        // Fade in/out logic
-        if (p.opacity < p.maxOpacity) p.opacity += 0.01;
+      particles.forEach(p => {
+        if (p.opacity < p.maxOpacity) p.opacity += 0.008;
 
         p.x += p.vx;
         p.y += p.vy;
 
-        // Warp around screen
-        if (p.x < 0) p.x = canvas.width;
-        if (p.x > canvas.width) p.x = 0;
-        if (p.y < 0) p.y = canvas.height;
-        if (p.y > canvas.height) p.y = 0;
+        if (p.y < 0) {
+          p.y = window.innerHeight;
+          p.x = Math.random() * window.innerWidth;
+          p.opacity = 0;
+        }
 
-        // Particle style - Dark deep red/ember vibe
-        const r = 255;
-        const g = 45;
-        const b = 85;
+        if (p.x < 0) p.x = window.innerWidth;
+        if (p.x > window.innerWidth) p.x = 0;
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
 
-        // Add subtle glow
         ctx.shadowBlur = p.size * 2;
-        ctx.shadowColor = `rgba(255, 45, 85, ${p.opacity * 0.5})`;
-
-        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${p.opacity})`;
+        ctx.shadowColor = `rgba(255,60,60,${p.opacity * 0.5})`;
+        ctx.fillStyle = `rgba(255,60,60,${p.opacity * opacityMul})`;
         ctx.fill();
       });
 
-      if (!prefersReducedMotion) {
-        animationFrameId = requestAnimationFrame(draw);
-      }
+      rafId = requestAnimationFrame(draw);
     };
 
-    window.addEventListener('resize', resize);
+    window.addEventListener('resize', init);
     init();
     draw();
 
     return () => {
-      window.removeEventListener('resize', resize);
-      cancelAnimationFrame(animationFrameId);
+      window.removeEventListener('resize', init);
+      cancelAnimationFrame(rafId);
     };
   }, []);
 
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 pointer-events-none z-0 transition-opacity duration-1000 bg-transparent"
-      style={{ opacity: 0.6 }}
+      className="fixed inset-0 pointer-events-none z-5 bg-transparent"
+      aria-hidden
     />
   );
 };

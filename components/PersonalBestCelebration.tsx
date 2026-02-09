@@ -81,14 +81,14 @@ export const PersonalBestCelebration: React.FC<PersonalBestCelebrationProps> = (
           initial={{ opacity: 0, y: 50, scale: 0.9 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, scale: 0.9 }}
-          className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[100] pointer-events-none"
+          className="fixed bottom-10 left-1/2 -translate-x-1/2 z-100 pointer-events-none"
         >
-          <div className="bg-slate-900/90 backdrop-blur-xl border border-blue-500/30 px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-4">
+          <div className="bg-slate-900/60 backdrop-blur-xl border border-slate-800 px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-4">
             <div className="p-3 bg-blue-600 rounded-xl">
-              <Trophy className="w-6 h-6 text-white" />
+              <Trophy className="w-6 h-6 text-slate-50" />
             </div>
             <div>
-              <h4 className="text-white font-black text-lg">New Personal Best!</h4>
+              <h4 className="text-slate-50 font-black text-lg">New Personal Best!</h4>
               <p className="text-slate-400 text-xs">Compared only to your own past sessions.</p>
             </div>
           </div>

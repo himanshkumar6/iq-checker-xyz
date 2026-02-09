@@ -5,7 +5,7 @@ import { SEO } from '../lib/seo';
 
 const UsernameIQPage: React.FC = () => {
   return (
-    <div className="min-h-[80vh] py-16 relative overflow-hidden">
+    <section className="min-h-[80vh] py-16 relative overflow-hidden bg-transparent">
       <SEO
         title="Username IQ Checker - Fun Social Media Benchmark | IQ Checker XYZ"
         description="Estimate your intelligence based on your social media username and handles. A fun, AI-powered heuristic assessment for Twitter, Instagram, and Discord users."
@@ -18,7 +18,7 @@ const UsernameIQPage: React.FC = () => {
 
       <div className="container mx-auto px-4">
         <div className="flex justify-center mb-8">
-          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-900/30 text-blue-400 text-sm font-bold animate-pulse">
+          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-900/30 light:bg-blue-100 text-blue-400 light:text-blue-600 text-sm font-bold animate-pulse">
             <Sparkles className="w-4 h-4" /> New AI-Powered Estimation
           </span>
         </div>
@@ -26,34 +26,34 @@ const UsernameIQPage: React.FC = () => {
         <UsernameIQChecker />
 
         {/* Methodology Section */}
-        <div className="mt-24 max-w-4xl mx-auto glass rounded-[3rem] p-8 md:p-16 text-left">
-          <h2 className="text-3xl font-black mb-10 text-white">Methodology: How Handle Heuristics Estimate IQ</h2>
+        <div className="mt-24 max-w-4xl mx-auto glass bg-slate-900/40 light:bg-white/60 backdrop-blur-md rounded-[3rem] p-8 md:p-16 text-left border border-slate-800 light:border-slate-200 shadow-xl">
+          <h2 className="text-3xl font-black mb-10 text-slate-50 light:text-slate-900">Methodology: How Handle Heuristics Estimate IQ</h2>
 
           <div className="space-y-10">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
               <div className="space-y-4">
-                <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                <h3 className="text-xl font-bold text-slate-50 light:text-slate-900 flex items-center gap-2">
                   <Zap className="w-5 h-5 text-blue-600" /> Pattern Analysis
                 </h3>
-                <p className="text-slate-400 text-sm leading-relaxed">
+                <p className="text-slate-300 light:text-slate-600 text-sm leading-relaxed">
                   Our algorithm analyzes the complexity, linguistic structure, and symbolic patterns within a digital handle. Research in cyber-psychology suggests a subtle correlation between the choice of pseudonyms and cognitive preferences. Complex, unique handles often correlate with higher "Need for Cognition" (NFC) scores.
                 </p>
               </div>
               <div className="space-y-4">
-                <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                <h3 className="text-xl font-bold text-slate-50 light:text-slate-900 flex items-center gap-2">
                   <ShieldCheck className="w-5 h-5 text-blue-600" /> Heuristic Calibration
                 </h3>
-                <p className="text-slate-400 text-sm leading-relaxed">
+                <p className="text-slate-300 light:text-slate-600 text-sm leading-relaxed">
                   We use a heuristic model calibrated against 50,000+ anonymized data points. The model looks for "entropy" in the username—the balance between readability and complexity. High-entropy names without being "gibberish" are weighted higher in our specific IQ estimation formula.
                 </p>
               </div>
             </div>
 
-            <div className="bg-slate-900/50 p-8 rounded-2xl border border-slate-800">
-              <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+            <div className="bg-slate-900/40 light:bg-slate-50/70 backdrop-blur-sm p-8 rounded-2xl border border-slate-800 light:border-slate-100">
+              <h3 className="text-lg font-bold text-slate-50 light:text-slate-900 mb-4 flex items-center gap-2">
                 <Info className="w-5 h-5 text-blue-600" /> Entertainment Purpose Only
               </h3>
-              <p className="text-slate-400 text-sm leading-relaxed">
+              <p className="text-slate-300 light:text-slate-600 text-sm leading-relaxed">
                 The **Username IQ Checker** is a social heuristic tool designed for entertainment. It analyzes linguistic complexity in handles but does not measure actual cognitive ability. For a standardized assessment of fluid intelligence, please utilize our <a href="/iq-test" className="text-blue-600 font-bold hover:underline">Standard IQ Matrix Test</a>.
               </p>
             </div>
@@ -64,8 +64,8 @@ const UsernameIQPage: React.FC = () => {
                   <HelpCircle className="w-4 h-4" />
                 </div>
                 <div>
-                  <p className="text-white font-bold text-xs uppercase mb-1">Privacy First</p>
-                  <p className="text-[10px] text-slate-500">We do not store or track any usernames entered into the tool.</p>
+                  <p className="text-slate-50 light:text-slate-900 font-bold text-xs uppercase mb-1">Privacy First</p>
+                  <p className="text-[10px] text-slate-400 light:text-slate-600">We do not store or track any usernames entered into the tool.</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
@@ -73,8 +73,8 @@ const UsernameIQPage: React.FC = () => {
                   <Sparkles className="w-4 h-4" />
                 </div>
                 <div>
-                  <p className="text-white font-bold text-xs uppercase mb-1">AI Optimized</p>
-                  <p className="text-[10px] text-slate-500">Updated weekly with new social media handle trends.</p>
+                  <p className="text-slate-50 light:text-slate-900 font-bold text-xs uppercase mb-1">AI Optimized</p>
+                  <p className="text-[10px] text-slate-400 light:text-slate-600">Updated weekly with new social media handle trends.</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
@@ -82,15 +82,15 @@ const UsernameIQPage: React.FC = () => {
                   <Activity className="w-4 h-4" />
                 </div>
                 <div>
-                  <p className="text-white font-bold text-xs uppercase mb-1">Viral Stats</p>
-                  <p className="text-[10px] text-slate-500">Join the thousands sharing their "Handle IQ" on Twitter.</p>
+                  <p className="text-slate-50 light:text-slate-900 font-bold text-xs uppercase mb-1">Viral Stats</p>
+                  <p className="text-[10px] text-slate-400 light:text-slate-600">Join the thousands sharing their "Handle IQ" on Twitter.</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

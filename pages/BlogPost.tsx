@@ -1,8 +1,17 @@
-
 import React, { useState } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { BLOG_ARTICLES } from '../constants';
-import { Clock, ArrowLeft, Share2, Facebook, Twitter, Link as LinkIcon, User, Calendar, ShieldCheck, Check } from 'lucide-react';
+import {
+  Clock,
+  ArrowLeft,
+  Facebook,
+  Twitter,
+  Link as LinkIcon,
+  User,
+  Calendar,
+  ShieldCheck,
+  Check
+} from 'lucide-react';
 import { motion } from 'framer-motion';
 import { SEO } from '../lib/seo';
 import { shareToTwitter, shareToFacebook, copyToClipboard } from '../lib/share';
@@ -15,22 +24,14 @@ const BlogPost: React.FC = () => {
   if (!article) {
     return (
       <>
-        <SEO title="Article Not Found" noindex={true} />
+        <SEO title="Article Not Found" description="The requested article could not be found." noindex />
         <Navigate to="/blog" />
       </>
     );
   }
 
   const currentUrl = `${window.location.origin}/blog/${article.slug}`;
-  const shareText = `${article.title} - IQ Checker XYZ`;
-
-  const handleTwitterShare = () => {
-    shareToTwitter(shareText, currentUrl);
-  };
-
-  const handleFacebookShare = () => {
-    shareToFacebook(currentUrl);
-  };
+  const shareText = `${article.title} – IQ Checker XYZ`;
 
   const handleCopyLink = async () => {
     const success = await copyToClipboard(currentUrl);
@@ -41,111 +42,175 @@ const BlogPost: React.FC = () => {
   };
 
   return (
-    <article className="container mx-auto px-4 py-12 max-w-4xl">
+    <div className="bg-transparent min-h-screen">
       <SEO
-        title={`${article.title} - IQ Checker XYZ`}
+        title={`${article.title} – IQ Checker XYZ`}
         description={article.excerpt}
         canonical={`https://iqcheckerxyz.compresspdfto200kb.online/blog/${article.slug}`}
         ogTitle={article.title}
         ogDescription={article.excerpt}
         ogType="article"
       />
-      <Link to="/blog" className="inline-flex items-center gap-2 text-sm font-bold text-slate-400 hover:text-blue-600 mb-12 transition-colors">
-        <ArrowLeft className="w-4 h-4" /> Back to Research
-      </Link>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
-        <div className="flex flex-wrap items-center gap-6 text-sm font-bold text-blue-600 mb-8 uppercase tracking-widest">
-          <span className="flex items-center gap-2"><Calendar className="w-4 h-4" /> Last Updated: Feb 2026</span>
-          <span className="flex items-center gap-2 text-slate-400"><Clock className="w-4 h-4" /> {article.readTime}</span>
-          <span className="flex items-center gap-2 text-emerald-600"><ShieldCheck className="w-4 h-4" /> Verified Content</span>
-        </div>
+      {/* ❌ NO BACKDROP BLUR ON OUTER WRAPPER */}
+      <section className="py-16 bg-slate-900/20 light:bg-slate-50/10 border-b border-slate-900/50 light:border-slate-200">
+        <article className="container mx-auto px-4 max-w-6xl">
 
-        <h1 className="text-4xl md:text-6xl font-black mb-12 leading-tight text-white">
-          {article.title}
-        </h1>
+          <Link
+            to="/blog"
+            className="inline-flex items-center gap-2 text-sm font-bold text-slate-400 light:text-slate-500 hover:text-blue-600 mb-10 transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" /> Back to Research
+          </Link>
 
-        <div className="aspect-21/9 rounded-4xl overflow-hidden mb-12 shadow-2xl">
-          <img
-            src={`https://picsum.photos/seed/${article.slug}/1200/600`}
-            alt={article.title}
-            className="w-full h-full object-cover"
-          />
-        </div>
+          {/* ✅ SINGLE PREMIUM GLASS LAYER */}
+          <div className="glass bg-slate-900/40 light:bg-white/70 backdrop-blur-md rounded-[3rem] p-8 md:p-16 border border-slate-800 light:border-slate-200 shadow-xl">
 
-        {/* Author Block */}
-        <div className="flex items-center gap-4 p-6 bg-slate-900 rounded-3xl mb-12 border border-slate-800">
-          <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white">
-            <User className="w-6 h-6" />
-          </div>
-          <div>
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Written By</p>
-            <p className="font-bold text-white">Editorial Team — IQ Checker XYZ</p>
-          </div>
-          <div className="ml-auto px-4 py-1 bg-blue-900/30 text-blue-400 text-[10px] font-black rounded-full uppercase tracking-tighter">
-            Cognitive Science Expert
-          </div>
-        </div>
+            <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}>
 
-        <div className="flex flex-col lg:flex-row gap-16">
-          <div className="lg:w-3/4">
-            <div className="prose prose-lg dark:prose-invert max-w-none prose-p:text-slate-500 prose-p:leading-relaxed prose-headings:font-black prose-a:text-blue-600">
-              {article.content.split('\n\n').map((para, i) => (
-                <p key={i} className="mb-6">{para}</p>
-              ))}
-
-              <div className="mt-12 p-8 bg-blue-900/20 rounded-[2rem] border border-blue-900/50">
-                <h3 className="text-xl font-bold mb-4">Benchmark Your Cognitive Agility</h3>
-                <p className="text-slate-400 mb-6">Put the theory into practice. Our 2026 logical reasoning test is specifically calibrated to measure fluid intelligence across 15 critical pattern recognition items.</p>
-                <Link to="/iq-test" className="px-8 py-3 bg-blue-600 text-white font-bold rounded-xl inline-block shadow-lg shadow-blue-600/20 hover:scale-105 transition-transform">
-                  Start Free IQ Test
-                </Link>
+              {/* META STRIP */}
+              <div className="flex flex-wrap items-center gap-6 text-xs font-bold uppercase tracking-widest mb-8">
+                <span className="flex items-center gap-2 text-blue-500">
+                  <Calendar className="w-4 h-4" /> Feb 2026
+                </span>
+                <span className="flex items-center gap-2 text-slate-400">
+                  <Clock className="w-4 h-4" /> {article.readTime}
+                </span>
+                <span className="flex items-center gap-2 text-emerald-500">
+                  <ShieldCheck className="w-4 h-4" /> Expert Reviewed
+                </span>
               </div>
-            </div>
-          </div>
 
-          <div className="lg:w-1/4">
-            <div className="sticky top-32">
-              <h4 className="font-bold mb-6 text-sm uppercase tracking-widest text-slate-400">Distribute Wisdom</h4>
-              <div className="flex flex-row lg:flex-col gap-4">
-                <ShareButton icon={<Twitter />} color="text-[#1DA1F2]" label="Tweet" onClick={handleTwitterShare} />
-                <ShareButton icon={<Facebook />} color="text-[#1877F2]" label="Share" onClick={handleFacebookShare} />
-                <ShareButton
-                  icon={copied ? <Check /> : <LinkIcon />}
-                  color={copied ? "text-green-500" : "text-slate-500"}
-                  label={copied ? "Copied!" : "Copy Link"}
-                  onClick={handleCopyLink}
+              {/* TITLE */}
+              <h1 className="text-4xl md:text-6xl font-black leading-tight mb-10 text-slate-50 light:text-slate-900">
+                {article.title}
+              </h1>
+
+              {/* HERO IMAGE */}
+              <div className="aspect-21/9 rounded-[2.5rem] overflow-hidden mb-14 shadow-2xl">
+                <img
+                  src={`https://picsum.photos/seed/${article.slug}/1200/600`}
+                  alt={article.title}
+                  className="w-full h-full object-cover"
                 />
               </div>
 
-              <div className="mt-12">
-                <h4 className="font-bold mb-6 text-sm uppercase tracking-widest text-slate-400">Related Research</h4>
-                <div className="space-y-6">
-                  {BLOG_ARTICLES.filter(a => a.slug !== slug).slice(0, 3).map(a => (
-                    <Link key={a.slug} to={`/blog/${a.slug}`} className="group block">
-                      <p className="text-sm font-bold leading-snug group-hover:text-blue-600 transition-colors">{a.title}</p>
-                    </Link>
-                  ))}
+              {/* AUTHOR / TRUST BOX */}
+              <div className="flex items-center gap-4 p-6 bg-slate-950/60 light:bg-slate-50 rounded-3xl mb-14 border border-slate-900 light:border-slate-100">
+                <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white">
+                  <User className="w-6 h-6" />
                 </div>
+                <div>
+                  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                    Written By
+                  </p>
+                  <p className="font-bold text-slate-50 light:text-slate-900">
+                    Editorial Research Team – IQ Checker XYZ
+                  </p>
+                </div>
+                <span className="ml-auto px-4 py-1 bg-blue-600/20 text-blue-500 text-[10px] font-black rounded-full uppercase">
+                  Cognitive Research
+                </span>
               </div>
-            </div>
+
+              {/* CONTENT + SIDEBAR */}
+              <div className="flex flex-col lg:flex-row gap-16">
+
+                {/* MAIN CONTENT */}
+                <div className="lg:w-3/4 prose prose-lg prose-invert light:prose-slate max-w-none prose-headings:font-black prose-p:leading-relaxed">
+                  {article.content.split('\n\n').map((p, i) => (
+                    <p key={i}>{p}</p>
+                  ))}
+
+                  {/* AUTHORITY ADD-ON SECTION (ADSENSE SAFE) */}
+                  <div className="mt-16 p-10 bg-blue-600/10 light:bg-blue-50 rounded-[2.5rem] border border-blue-600/30">
+                    <h2 className="text-2xl font-black mb-4 text-slate-50 light:text-slate-900">
+                      Why This Research Matters
+                    </h2>
+                    <p className="mb-4 text-slate-300 light:text-slate-700">
+                      Understanding cognitive performance is not about labels or scores.
+                      It’s about awareness — how people process information, adapt to
+                      complexity, and make decisions under uncertainty.
+                    </p>
+                    <p className="text-slate-300 light:text-slate-700">
+                      Our tools are designed for educational insight and self-reflection.
+                      They do not replace professional evaluation, diagnosis, or testing.
+                    </p>
+
+                    <Link
+                      to="/iq-test"
+                      className="inline-block mt-6 px-8 py-3 bg-blue-600 text-white font-black rounded-xl shadow-lg hover:scale-105 transition"
+                    >
+                      Take the Free Logical Reasoning Test
+                    </Link>
+                  </div>
+                </div>
+
+                {/* SIDEBAR */}
+                <aside className="lg:w-1/4">
+                  <div className="sticky top-32 space-y-12">
+
+                    {/* SHARE */}
+                    <div>
+                      <h4 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">
+                        Share This Article
+                      </h4>
+                      <div className="space-y-3">
+                        <ShareButton icon={<Twitter />} label="Twitter" onClick={() => shareToTwitter(shareText, currentUrl)} />
+                        <ShareButton icon={<Facebook />} label="Facebook" onClick={() => shareToFacebook(currentUrl)} />
+                        <ShareButton
+                          icon={copied ? <Check /> : <LinkIcon />}
+                          label={copied ? 'Copied' : 'Copy Link'}
+                          onClick={handleCopyLink}
+                        />
+                      </div>
+                    </div>
+
+                    {/* RELATED */}
+                    <div>
+                      <h4 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">
+                        Related Research
+                      </h4>
+                      <div className="space-y-4">
+                        {BLOG_ARTICLES.filter(a => a.slug !== slug).slice(0, 3).map(a => (
+                          <Link
+                            key={a.slug}
+                            to={`/blog/${a.slug}`}
+                            className="block font-bold text-slate-50 light:text-slate-900 hover:text-blue-600 transition"
+                          >
+                            {a.title}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+
+                  </div>
+                </aside>
+              </div>
+
+            </motion.div>
           </div>
-        </div>
-      </motion.div>
-    </article>
+        </article>
+      </section>
+    </div>
   );
 };
 
-const ShareButton = ({ icon, color, label, onClick }: { icon: React.ReactNode, color: string, label: string, onClick: () => void }) => (
+const ShareButton = ({
+  icon,
+  label,
+  onClick
+}: {
+  icon: React.ReactNode;
+  label: string;
+  onClick: () => void;
+}) => (
   <button
     onClick={onClick}
-    className={`p-4 glass rounded-2xl hover:scale-105 transition-all flex items-center justify-center gap-3 w-full group ${color}`}
+    className="glass bg-slate-900/50 light:bg-white/70 backdrop-blur-md border border-slate-800 light:border-slate-200 rounded-xl p-4 flex items-center gap-3 font-bold text-sm hover:scale-105 transition"
   >
-    {React.cloneElement(icon as React.ReactElement<any>, { className: 'w-5 h-5' })}
-    <span className="lg:hidden font-bold text-xs">{label}</span>
+    {icon}
+    {label}
   </button>
 );
 
