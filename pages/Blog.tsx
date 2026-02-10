@@ -9,33 +9,33 @@ const Blog: React.FC = () => {
   return (
     <div className="bg-transparent">
       <SEO
-        title="Cognitive Insights & Research | IQ Checker XYZ Blog"
-        description="Explore deep-dive research into human intelligence, brain training, and cognitive psychology. Stay updated with the latest in psychometrics."
+        title="Cognitive Research & Insights | IQ Checker XYZ"
+        description="In-depth articles on intelligence, reasoning skills, and cognitive psychology. Written for learning, clarity, and real-world understanding."
         canonical="https://iqcheckerxyz.compresspdfto200kb.online/blog"
       />
 
-      {/* ✅ OUTER SECTION — NO BACKDROP BLUR */}
+      {/* HEADER */}
       <section className="py-16 bg-slate-900/20 light:bg-slate-50/10 border-b border-slate-900/50 light:border-slate-200">
         <div className="container mx-auto px-4 max-w-6xl">
 
-          {/* HEADER */}
           <div className="text-center mb-16">
-            <h1 className="text-5xl font-black mb-6 text-slate-50 light:text-slate-900 uppercase tracking-tighter">
+            <h1 className="text-5xl font-black mb-6 text-slate-50 light:text-slate-900 tracking-tight">
               Cognitive Insights
             </h1>
-            <p className="text-xl text-slate-300 light:text-slate-600 max-w-2xl mx-auto italic">
-              Explore our latest research on intelligence, psychometrics, and cognitive development.
+            <p className="text-xl text-slate-300 light:text-slate-600 max-w-2xl mx-auto">
+              Research-backed articles exploring intelligence, reasoning,
+              and how the human mind processes information.
             </p>
           </div>
 
-          {/* GRID */}
+          {/* ARTICLES GRID */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
             {BLOG_ARTICLES.map((article, idx) => (
               <motion.article
                 key={article.slug}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.08 }}
+                transition={{ delay: idx * 0.06 }}
                 className="
                   group
                   glass
@@ -50,7 +50,7 @@ const Blog: React.FC = () => {
                   border
                   border-slate-800
                   light:border-slate-200
-                  shadow-xl
+                  shadow-lg
                   hover:shadow-2xl
                   transition-all
                 "
@@ -62,17 +62,16 @@ const Blog: React.FC = () => {
                     alt={article.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-
                   <div className="absolute top-4 left-4">
-                    <span className="px-3 py-1 bg-blue-600 text-slate-50 text-[10px] font-black rounded-full uppercase tracking-widest">
-                      Psychology
+                    <span className="px-3 py-1 bg-blue-600 text-slate-50 text-[10px] font-bold rounded-full uppercase tracking-widest">
+                      Research
                     </span>
                   </div>
                 </div>
 
                 {/* CONTENT */}
                 <div className="p-8 flex flex-col grow">
-                  <div className="flex items-center gap-4 text-xs font-bold text-slate-400 light:text-slate-500 mb-4 uppercase tracking-widest">
+                  <div className="flex items-center gap-4 text-xs font-semibold text-slate-400 light:text-slate-500 mb-4 uppercase tracking-widest">
                     <span>{article.date}</span>
                     <span className="flex items-center gap-1">
                       <Clock className="w-3 h-3" />
@@ -90,9 +89,9 @@ const Blog: React.FC = () => {
 
                   <Link
                     to={`/blog/${article.slug}`}
-                    className="flex items-center gap-2 font-black text-sm text-blue-600 group-hover:gap-3 transition-all"
+                    className="flex items-center gap-2 font-bold text-sm text-blue-600 group-hover:gap-3 transition-all"
                   >
-                    Read Article <ArrowRight className="w-4 h-4" />
+                    Read article <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
               </motion.article>

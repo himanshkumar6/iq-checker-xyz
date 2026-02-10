@@ -1,6 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { AnimatePresence } from "framer-motion";
+import { Plus, Minus, X } from "lucide-react";
 import {
   Brain,
   Zap,
@@ -143,14 +145,74 @@ const ToolCard = ({ to, icon, title, desc }: any) => (
 
 const AccordionItem = ({ question, answer }: any) => {
   const [open, setOpen] = React.useState(false);
+
   return (
-    <div className="glass light:bg-white/80 backdrop-blur-md rounded-2xl border light:border-slate-200">
-      <button onClick={() => setOpen(!open)} className="w-full px-6 py-5 text-left font-bold">
-        {question}
+    <div className="
+      glass
+      light:bg-white/80
+      backdrop-blur-md
+      rounded-2xl
+      border
+      border-slate-800
+      light:border-slate-200
+      overflow-hidden
+    ">
+      {/* HEADER */}
+      <button
+        onClick={() => setOpen(!open)}
+        className="
+          w-full
+          px-6 py-5
+          flex items-center justify-between
+          text-left
+          font-bold
+          text-slate-50
+          light:text-slate-900
+        "
+      >
+        <span className="pr-6">{question}</span>
+
+        {/* ICON */}
+        <motion.span
+          animate={{ rotate: open ? 180 : 0 }}
+          transition={{ duration: 0.35, ease: "easeInOut" }}
+          className="
+            w-9 h-9
+            flex items-center justify-center
+            rounded-full
+            border
+            border-slate-700
+            light:border-slate-300
+            text-slate-400
+            light:text-slate-500
+            shrink-0
+          "
+        >
+          {open ? <X className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+        </motion.span>
       </button>
-      {open && <div className="px-6 pb-6 text-slate-400 light:text-slate-600">{answer}</div>}
+
+      {/* CONTENT */}
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{
+              duration: 0.45,
+              ease: [0.25, 0.1, 0.25, 1] // Netflix / iOS style easing
+            }}
+          >
+            <div className="px-6 pb-6 text-slate-400 light:text-slate-600 text-sm leading-relaxed">
+              {answer}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
+
 
 export default Home;
