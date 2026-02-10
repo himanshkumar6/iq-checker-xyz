@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Brain, Twitter, Instagram, Mail, Github, ShieldCheck } from 'lucide-react';
+import { Brain, Twitter, Instagram, Mail, Github} from 'lucide-react';
 import { FOOTER_FAQS } from '../constants';
 
 const Footer: React.FC = () => {
@@ -78,9 +78,9 @@ const Footer: React.FC = () => {
             <h4 className="font-bold mb-6 text-slate-50 light:text-slate-900">Authority</h4>
             <ul className="space-y-4 text-sm text-slate-300 light:text-slate-600">
               <li><Link to="/blog" className="hover:text-blue-600">Research & Blog</Link></li>
-              <li><Link to="/about-us" className="hover:text-blue-600">Our Methodology</Link></li>
-              <li><Link to="/contact" className="hover:text-blue-600">Technical Support</Link></li>
-              <li><Link to="/dmca" className="hover:text-blue-600">Copyright Compliance</Link></li>
+              <li><Link to="/about-us" className="hover:text-blue-600">About Us</Link></li>
+              <li><Link to="/contact" className="hover:text-blue-600">Contact Us</Link></li>
+              <li><Link to="/dmca" className="hover:text-blue-600">DMCA</Link></li>
             </ul>
           </div>
 
@@ -89,7 +89,7 @@ const Footer: React.FC = () => {
             <ul className="space-y-4 text-sm text-slate-300 light:text-slate-600">
               <li><Link to="/privacy-policy" className="hover:text-blue-600">Privacy Policy</Link></li>
               <li><Link to="/terms" className="hover:text-blue-600">Terms of Service</Link></li>
-              <li><Link to="/disclaimer" className="hover:text-blue-600">Health Disclaimer</Link></li>
+              <li><Link to="/disclaimer" className="hover:text-blue-600">Disclaimer</Link></li>
             </ul>
           </div>
         </div>
