@@ -65,16 +65,6 @@ const Footer: React.FC = () => {
           </div>
 
           <div>
-            <h4 className="font-bold mb-6 text-slate-50 light:text-slate-900">Brain Games</h4>
-            <ul className="space-y-4 text-sm text-slate-300 light:text-slate-600">
-              <li><Link to="/brain-games/pattern-recognition" className="hover:text-blue-600">Pattern Recognition Game</Link></li>
-              <li><Link to="/brain-games/speed-math" className="hover:text-blue-600">Speed Math Challenge</Link></li>
-              <li><Link to="/brain-games/memory-grid" className="hover:text-blue-600">Memory Grid Game</Link></li>
-              <li><Link to="/brain-games" className="hover:text-blue-600 italic">View All Brain Exercises</Link></li>
-            </ul>
-          </div>
-
-          <div>
             <h4 className="font-bold mb-6 text-slate-50 light:text-slate-900">Authority</h4>
             <ul className="space-y-4 text-sm text-slate-300 light:text-slate-600">
               <li><Link to="/blog" className="hover:text-blue-600">Research & Blog</Link></li>
