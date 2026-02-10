@@ -5,16 +5,12 @@ import {
   Brain,
   Zap,
   Clock,
-  Users,
   ArrowRight,
-  ShieldCheck,
-  Trophy,
   Sparkles,
-  BookOpen,
-  BarChart3,
 } from 'lucide-react';
 import { SEO } from '../lib/seo';
 import { HOME_FAQS } from '../constants';
+import { FOOTER_FAQS } from '../constants';
 
 const Home: React.FC = () => {
   return (
@@ -66,7 +62,7 @@ const Home: React.FC = () => {
       </section>
 
       {/* PHILOSOPHY — glass surface */}
-      <section className="py-16 px-4 bg-slate-900/40 light:bg-white/70 backdrop-blur-sm border-y border-slate-900/40 light:border-slate-200">
+      <section className="px-4 pb-16 bg-transparent pt-16">
         <div className="container mx-auto max-w-6xl text-center">
           <h2 className="text-3xl font-extrabold mb-6 text-slate-50 light:text-slate-900">
             What Is IQ Checker XYZ?
@@ -90,15 +86,22 @@ const Home: React.FC = () => {
       </section>
 
       {/* SOCIAL PROOF — glass section */}
-      <section className="py-16 px-4 bg-slate-900/40 light:bg-slate-50/70 backdrop-blur-sm border-y border-slate-900/40 light:border-slate-200">
+      <section className="px-4 pb-16 bg-transparent pt-16">
         <div className="container mx-auto max-w-6xl flex flex-col md:flex-row gap-16 items-center">
           <div className="flex-1">
-            <h2 className="text-4xl font-extrabold text-slate-50 light:text-slate-900 mb-6">
-              Share Your Score
-            </h2>
-            <p className="text-slate-300 light:text-slate-600">
-              Beautiful result cards designed for social sharing.
-            </p>
+            <div className="mb-16">
+              <h4 className="text-xl font-bold mb-8 text-center text-slate-50 light:text-slate-900">
+                Quick Reassurance
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {FOOTER_FAQS.map((faq, i) => (
+                  <div key={i} className="p-6 rounded-2xl bg-slate-950/40 light:bg-white/50 border border-slate-800 light:border-slate-100">
+                    <p className="font-bold text-slate-50 light:text-slate-900 mb-2">{faq.q}</p>
+                    <p className="text-sm text-slate-400 light:text-slate-600">{faq.a}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -111,7 +114,7 @@ const Home: React.FC = () => {
       </section>
 
       {/* FAQ — glass */}
-      <section className="py-16 px-4 bg-slate-900/30 light:bg-white/60 backdrop-blur-sm">
+      <section className="px-4 pb-16 bg-transparent pt-16">
         <div className="container mx-auto max-w-6xl">
           <h2 className="text-4xl font-extrabold text-center mb-12 text-slate-50 light:text-slate-900">
             Common Questions

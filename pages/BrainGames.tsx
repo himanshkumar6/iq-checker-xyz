@@ -203,7 +203,7 @@ const BrainGames: React.FC = () => {
       </section>
 
       {/* FAQ SECTION — glass */}
-      <section className="py-16 px-4 bg-slate-900/30 light:bg-white/60 backdrop-blur-sm border-t border-slate-800/50 light:border-slate-200">
+      <section className="px-4 pb-16 bg-transparent pt-16">
         <div className="container mx-auto max-w-4xl">
           <h2 className="text-4xl font-extrabold text-center mb-12 text-slate-50 light:text-slate-900">
             Frequently Asked Questions

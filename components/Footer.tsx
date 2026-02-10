@@ -1,8 +1,8 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Brain, Twitter, Instagram, Mail, Github} from 'lucide-react';
-import { FOOTER_FAQS } from '../constants';
+import { Brain, Twitter, Instagram, Mail, Github } from 'lucide-react';
+
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
@@ -95,19 +95,7 @@ const Footer: React.FC = () => {
         </div>
 
         {/* FAQ FOOTER SECTION */}
-        <div className="mb-16">
-          <h4 className="text-xl font-bold mb-8 text-center text-slate-50 light:text-slate-900">
-            Quick Reassurance
-          </h4>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {FOOTER_FAQS.map((faq, i) => (
-              <div key={i} className="p-6 rounded-2xl bg-slate-950/40 light:bg-white/50 border border-slate-800 light:border-slate-100">
-                <p className="font-bold text-slate-50 light:text-slate-900 mb-2">{faq.q}</p>
-                <p className="text-sm text-slate-400 light:text-slate-600">{faq.a}</p>
-              </div>
-            ))}
-          </div>
-        </div>
+
 
         <div className="pt-8 border-t border-slate-900 light:border-slate-200 flex flex-col md:flex-row justify-between items-center gap-6 text-slate-500 text-sm">
           <div className="flex flex-col gap-1">
